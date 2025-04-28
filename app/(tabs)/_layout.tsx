@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View } from "react-native";
+import { Logo } from "~/components/Logo";
 
 export default function TabsLayout() {
   return (
@@ -10,7 +11,7 @@ export default function TabsLayout() {
           let iconName: any;
 
           // ícones para cada rota
-          if (route.name === "index") {
+          if (route.name === "home") {
             iconName = "home-outline";
           } else if (route.name === "search") {
             iconName = "search-outline";
@@ -29,10 +30,7 @@ export default function TabsLayout() {
         tabBarShowLabel: false,
         headerTitle: () => (
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Ionicons name="paw-outline" size={24} color="#2ecc71" />
-            <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-              Adote.<Text style={{ color: "#2ecc71" }}>me</Text>
-            </Text>
+            <Logo size={150}/>
           </View>
         ),
         headerRight: () => (
@@ -53,7 +51,7 @@ export default function TabsLayout() {
         // organição das telas na barra de navegação
       <Tabs.Screen name="search" options={{ title: "Buscar" }} />
       <Tabs.Screen name="profile" options={{ title: "Perfil" }} />
-      <Tabs.Screen name="index" options={{ title: "Início" }} />
+      <Tabs.Screen name="home" options={{ title: "Início" }} />
       <Tabs.Screen name="messages" options={{ title: "Mensagens" }} />
       <Tabs.Screen name="favorites" options={{ title: "Favoritos" }} />
       

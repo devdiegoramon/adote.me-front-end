@@ -32,26 +32,40 @@ export default function RootLayout() {
         <BottomSheetModalProvider>
           <ActionSheetProvider>
             <NavThemeProvider value={NAV_THEME[colorScheme]}>
-              <Stack screenOptions={SCREEN_OPTIONS}>
-                <Stack.Screen name="(tabs)" options={DRAWER_OPTIONS} />
+              <Stack
+                screenOptions={{
+                  headerShown: false, // Desativa header globalmente
+                  animation: 'ios_from_right',
+                }}
+              >
+                {/* Rotas de autenticação */}
+                <Stack.Screen 
+                  name="(auth)" 
+                  options={{ 
+                    headerShown: false,
+                    animation: 'fade' 
+                  }} 
+                />
+                
+                {/* Rotas principais com tabs */}
+                <Stack.Screen 
+                  name="(tabs)" 
+                  options={{ 
+                    headerShown: false 
+                  }} 
+                />
+                
+                {/* Outras rotas */}
+                <Stack.Screen name="pet-details" />
+                <Stack.Screen name="modal" options={MODAL_OPTIONS} />
               </Stack>
             </NavThemeProvider>
           </ActionSheetProvider>
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
-
-      {/* </ExampleProvider> */}
     </>
   );
 }
-
-const SCREEN_OPTIONS = {
-  animation: 'ios_from_right',
-} as const;
-
-const DRAWER_OPTIONS = {
-  headerShown: false,
-} as const;
 
 const MODAL_OPTIONS = {
   presentation: 'modal',
