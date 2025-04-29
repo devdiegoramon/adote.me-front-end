@@ -34,11 +34,10 @@ export default function RootLayout() {
             <NavThemeProvider value={NAV_THEME[colorScheme]}>
               <Stack
                 screenOptions={{
-                  headerShown: false, // Desativa header globalmente
+                  headerShown: false,
                   animation: 'ios_from_right',
                 }}
               >
-                {/* Rotas de autenticação */}
                 <Stack.Screen 
                   name="(auth)" 
                   options={{ 
@@ -46,18 +45,12 @@ export default function RootLayout() {
                     animation: 'fade' 
                   }} 
                 />
-                
-                {/* Rotas principais com tabs */}
                 <Stack.Screen 
                   name="(tabs)" 
                   options={{ 
                     headerShown: false 
                   }} 
                 />
-                
-                {/* Outras rotas */}
-                <Stack.Screen name="pet-details" />
-                <Stack.Screen name="modal" options={MODAL_OPTIONS} />
               </Stack>
             </NavThemeProvider>
           </ActionSheetProvider>
