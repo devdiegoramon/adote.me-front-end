@@ -1,68 +1,92 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Logo } from "../../components/Logo";
+import { Logo } from '~/components/base/Logo';
+import { Button } from '~/components/base/Button';
+import { InputField } from '~/components/base/InputField';
+import { SocialButton } from '~/components/base/SocialButton';
 
 export default function Login() {
   const router = useRouter();
 
+  // Estados para armazenar os valores dos campos de email e senha
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+
+  // Função para lidar com o processo de login
+  const handleLogin = () => {
+    // Validação básica - verifica se os campos estão preenchidos
+    if (!email || !senha) {
+      Alert.alert('Erro', 'Preencha todos os campos.');
+      return;
+    }
+
+    // Em produção, aqui viria a chamada à API de autenticação
+    console.log('Login com:', { email, senha });
+    
+    // Redireciona para a tela inicial após o "login"
+    router.replace('/(tabs)/home');
+  };
+
   return (
     <ScrollView>
+      {/* Container principal da tela */}
       <View className="flex-1 bg-white px-6 py-6 items-center justify-center min-h-screen">
-        {/* Logo */}
-        <Logo size={300} />
         
-        {/* Título */}
+        {/* Componente de Logo - tamanho personalizado */}
+        <Logo size={300} />
+
+        {/* Títulos da tela */}
         <Text className="text-2xl font-bold mb-2 text-gray-800">Bem-vindo de volta!</Text>
         <Text className="text-base text-gray-600 mb-8">Faça login na sua conta</Text>
-        
-        {/* Formulário */}
+
+        {/* Seção do formulário */}
         <View className="w-full mb-6">
-          <TextInput
-            className="bg-gray-100 border border-gray-200 rounded-xl p-4 mb-4 text-base"
+          {/* Campo de email */}
+          <InputField
+            value={email}
+            onChange={setEmail}
             placeholder="Email"
-            placeholderTextColor="#999"
             keyboardType="email-address"
-            autoCapitalize="none"
+            autoCapitalize="none" 
           />
-          
-          <TextInput
-            className="bg-gray-100 border border-gray-200 rounded-xl p-4 mb-4 text-base"
+
+          {/* Campo de senha (com texto oculto) */}
+          <InputField
+            value={senha}
+            onChange={setSenha}
             placeholder="Senha"
-            placeholderTextColor="#999"
-            secureTextEntry
+            secureTextEntry  // Oculta o texto digitado
           />
-          
-          <TouchableOpacity 
-            onPress={() => router.replace('/(tabs)/home')}
-            className="bg-emerald-500 py-4 rounded-xl items-center mb-4 shadow"
+
+          {/* Botão principal de login */}
+          <Button onPress={handleLogin} variant="primary">
+            Entrar
+          </Button>
+
+          {/* Link para recuperação de senha */}
+          <Button
+            onPress={() => router.push('/forgotpassword')}
+            variant="borderless"
+            className="mt-4" // Margem superior
           >
-            <Text className="text-white font-bold text-base">Entrar</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity className="items-center">
-            <Text className="text-emerald-500 font-bold">Esqueceu sua senha?</Text>
-          </TouchableOpacity>
+            Esqueceu sua senha?
+          </Button>
         </View>
-        
-        {/* Divisor */}
-        <View className="flex-row items-center my-6 w-full">
+
+        {/* Divisor visual entre login normal e social */}
+        <View className="flex-row items-center mb-6 w-full">
           <View className="flex-1 h-px bg-gray-200" />
           <Text className="mx-2 text-gray-500">ou</Text>
           <View className="flex-1 h-px bg-gray-200" />
         </View>
-        
-        {/* Login Social */}
-        <TouchableOpacity className="flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-xl p-4 w-full mb-6">
-          <Image
-            source={require('../../assets/logo-govbr.png')}
-            style={{ width: 64, height: 24 }}
-            resizeMode="contain"
-            className="mr-3"
-          />
-          <Text className="text-gray-800 font-bold">Continuar com GOV.br</Text>
-        </TouchableOpacity>
-        
-        {/* Cadastro */}
+
+        {/* Botão de login social (GOV.br) */}
+        <SocialButton
+          onPress={() => router.replace('/(tabs)/home')}
+        />
+
+        {/* Link para tela de cadastro */}
         <View className="flex-row justify-center mt-4">
           <Text className="text-gray-600 mr-2">Não tem uma conta?</Text>
           <TouchableOpacity onPress={() => router.push('./signup')}>

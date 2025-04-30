@@ -1,10 +1,15 @@
 import { useState, useCallback } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Button } from '~/components/base/Button';
+import { InputField } from '~/components/base/InputField';
+import { SocialButton } from '~/components/base/SocialButton';
 
-type UserType = 'adotante' | 'ong';
+// Tipos TypeScript para melhor organização do código
+type UserType = 'adotante' | 'ong';  // Tipos de usuário suportados
 
+// Interface para os dados do formulário
 type FormData = {
   nome: string;
   email: string;
@@ -12,12 +17,16 @@ type FormData = {
   senha: string;
   confirmarSenha: string;
   endereco: string;
-  cnpj: string;
+  cnpj: string;  // Campo específico para ONGs
 };
 
 export default function Signup() {
   const router = useRouter();
+  
+  // Estado para controlar o tipo de usuário selecionado
   const [userType, setUserType] = useState<UserType>('adotante');
+  
+  // Estado para armazenar todos os dados do formulário
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     email: '',
@@ -25,118 +34,157 @@ export default function Signup() {
     senha: '',
     confirmarSenha: '',
     endereco: '',
-    cnpj: ''
+    cnpj: '',
   });
 
+  // Função otimizada para atualizar os campos do formulário
   const handleInputChange = useCallback((field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   }, []);
 
+  // Função para validar todos os campos do formulário
+  const validateForm = () => {
+    const { nome, email, telefone, senha, confirmarSenha, endereco, cnpj } = formData;
+
+    // Validação de campos obrigatórios
+    if (!nome || !email || !telefone || !senha || !confirmarSenha || !endereco) {
+      Alert.alert("Erro", "Preencha todos os campos obrigatórios.");
+      return false;
+    }
+
+    // Validação específica para ONGs
+    if (userType === 'ong' && !cnpj) {
+      Alert.alert("Erro", "Informe o CNPJ da ONG.");
+      return false;
+    }
+
+    // Validação de confirmação de senha
+    if (senha !== confirmarSenha) {
+      Alert.alert("Erro", "As senhas não coincidem.");
+      return false;
+    }
+
+    return true;
+  };
+
+  // Função para lidar com o envio do formulário
   const handleSubmit = useCallback(() => {
-    console.log('Dados do formulário:', formData);
-    router.push('/');
+    if (validateForm()) {
+      // Em produção, aqui viria a chamada à API de cadastro
+      console.log('Dados do formulário:', formData);
+      
+      // Redireciona para a tela inicial após cadastro
+      router.replace('/(tabs)/home');
+    }
   }, [formData, router]);
 
+  // Componente reutilizável para os botões de seleção de tipo de usuário
   const renderUserTypeButton = (type: UserType, iconName: 'person' | 'home', label: string) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       className={`flex-1 p-4 rounded-xl border mx-1 flex-row justify-center items-center gap-2 ${
-        userType === type 
-          ? 'bg-emerald-500 border-emerald-500' 
-          : 'bg-transparent border-gray-200'
+        userType === type ? 'bg-emerald-500 border-emerald-500' : 'bg-transparent border-gray-200'
       }`}
       onPress={() => setUserType(type)}
     >
-      <Ionicons 
-        name={iconName} 
-        size={32} 
-        color={userType === type ? '#ffffff' : '#666'} 
-      />
-      <Text className={`font-bold ${
-        userType === type ? 'text-white' : 'text-gray-600'
-      }`}>
+      {/* Ícone do botão (muda de cor quando selecionado) */}
+      <Ionicons name={iconName} size={32} color={userType === type ? '#fff' : '#666'} />
+      
+      {/* Texto do botão (muda de cor quando selecionado) */}
+      <Text className={`font-bold ${userType === type ? 'text-white' : 'text-gray-600'}`}>
         {label}
       </Text>
     </TouchableOpacity>
   );
 
-  const renderInputField = (
-    field: keyof FormData, 
-    placeholder: string, 
-    options: Partial<{
-      keyboardType: 'default' | 'numeric' | 'email-address' | 'phone-pad';
-      secureTextEntry: boolean;
-      autoCapitalize: 'none' | 'sentences' | 'words' | 'characters';
-    }> = {}
-  ) => (
-    <TextInput
-      className="bg-gray-100 border border-gray-200 rounded-xl p-4 mb-4 text-base"
-      placeholder={placeholder}
-      placeholderTextColor="#999"
-      value={formData[field]}
-      onChangeText={(text) => handleInputChange(field, text)}
-      {...options}
-    />
-  );
-
   return (
     <ScrollView className="bg-white">
       <View className="flex-1 px-6 py-6 items-center justify-center min-h-screen">
+        {/* Títulos da tela */}
         <Text className="text-2xl font-bold mb-2 text-gray-800">Crie sua conta</Text>
         <Text className="text-base text-gray-600 mb-8">Selecione o tipo de cadastro</Text>
-        
+
+        {/* Seção de seleção do tipo de usuário */}
         <View className="flex-row mb-6 w-full">
           {renderUserTypeButton('adotante', 'person', 'Sou Adotante')}
           {renderUserTypeButton('ong', 'home', 'Sou ONG')}
         </View>
-        
+
+        {/* Formulário de cadastro */}
         <View className="w-full">
-          {renderInputField('nome', 'Nome')}
-          {renderInputField('email', 'E-mail', { 
-            keyboardType: 'email-address', 
-            autoCapitalize: 'none' 
-          })}
+          {/* Campo de nome */}
+          <InputField
+            value={formData.nome}
+            onChange={text => handleInputChange('nome', text)}
+            placeholder="Nome"
+          />
           
-          {userType === 'ong' && renderInputField('cnpj', 'CNPJ', { 
-            keyboardType: 'numeric' 
-          })}
+          {/* Campo de email */}
+          <InputField
+            value={formData.email}
+            onChange={text => handleInputChange('email', text)}
+            placeholder="E-mail"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
           
-          {renderInputField('telefone', 'Telefone', { 
-            keyboardType: 'phone-pad' 
-          })}
-          {renderInputField('endereco', 'Endereço')}
-          {renderInputField('senha', 'Senha', { 
-            secureTextEntry: true 
-          })}
-          {renderInputField('confirmarSenha', 'Confirmar Senha', { 
-            secureTextEntry: true 
-          })}
+          {/* Campo condicional de CNPJ (apenas para ONGs) */}
+          {userType === 'ong' && (
+            <InputField
+              value={formData.cnpj}
+              onChange={text => handleInputChange('cnpj', text)}
+              placeholder="CNPJ"
+              keyboardType="numeric"
+            />
+          )}
           
-          <TouchableOpacity 
-            onPress={() => router.replace('/(tabs)/home')}
-            className="bg-emerald-500 py-4 rounded-xl items-center mb-4 shadow"
-          >
-            <Text className="text-white font-bold text-base">Cadastrar</Text>
-          </TouchableOpacity>
+          {/* Campo de telefone */}
+          <InputField
+            value={formData.telefone}
+            onChange={text => handleInputChange('telefone', text)}
+            placeholder="Telefone"
+            keyboardType="phone-pad"
+          />
+          
+          {/* Campo de endereço */}
+          <InputField
+            value={formData.endereco}
+            onChange={text => handleInputChange('endereco', text)}
+            placeholder="Endereço"
+          />
+          
+          {/* Campo de senha */}
+          <InputField
+            value={formData.senha}
+            onChange={text => handleInputChange('senha', text)}
+            placeholder="Senha"
+            secureTextEntry
+          />
+          
+          {/* Campo de confirmação de senha */}
+          <InputField
+            value={formData.confirmarSenha}
+            onChange={text => handleInputChange('confirmarSenha', text)}
+            placeholder="Confirmar Senha"
+            secureTextEntry
+          />
+
+          {/* Botão principal de cadastro */}
+          <Button onPress={handleSubmit}>Cadastrar</Button>
         </View>
-        
+
+        {/* Divisor visual entre cadastro normal e social */}
         <View className="flex-row items-center my-6 w-full">
           <View className="flex-1 h-px bg-gray-200" />
           <Text className="mx-2 text-gray-500">ou</Text>
           <View className="flex-1 h-px bg-gray-200" />
         </View>
-        
-        <TouchableOpacity className="flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-xl p-4 w-full mb-6">
-          <View className="w-16 h-6 flex items-center justify-center mr-3">
-            <Image
-              source={require('../../assets/logo-govbr.png')}
-              style={{ width: 64, height: 24 }}
-              resizeMode="contain"
-              className="mr-3"
-            />
-          </View>
-          <Text className="text-gray-800 font-bold">Continuar com GOV.br</Text>
-        </TouchableOpacity>
-        
+
+        {/* Botão de cadastro social (GOV.br) */}
+        <SocialButton
+          onPress={() => router.replace('/(tabs)/home')}
+        />
+
+        {/* Link para tela de login */}
         <View className="flex-row justify-center mt-4">
           <Text className="text-gray-600 mr-2">Já tem uma conta?</Text>
           <TouchableOpacity onPress={() => router.push('./login')}>
