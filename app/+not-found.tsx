@@ -8,7 +8,7 @@ export default function NotFoundScreen() {
       <Stack.Screen options={{ title: 'Página não encontrada' }} />
       <Container>
         <View className="flex-1 justify-center items-center px-6">
-          <Text className="text-3xl font-extrabold text-red-600 mb-4 text-center">
+          <Text className="text-3xl font-extrabold text-blue-600 mb-4 text-center">
             Ops! Página não encontrada 😢
           </Text>
 
@@ -16,7 +16,7 @@ export default function NotFoundScreen() {
             A rota que você tentou acessar não existe ou foi removida.
           </Text>
 
-          <Link href="/" asChild>
+          <Link href="/home" asChild>
             <Text className="text-white bg-emerald-600 px-6 py-3 rounded-full font-semibold">
               Voltar para a Home
             </Text>
