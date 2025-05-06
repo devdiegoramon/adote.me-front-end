@@ -7,7 +7,7 @@ export default function PetDetails() {
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <Image
-        source={{ uri: "https://images.unsplash.com/photo-1558788353-f76d92427f16" }}
+        source={{ uri: "https://images.unsplash.com/photo-1592194996308-7b43878e84a6" }}
         style={{ width: "100%", height: 300 }}
         resizeMode="cover"
       />
