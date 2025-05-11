@@ -1,8 +1,36 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { getPets } from '../../lib/api/pets';
+
+// Tipagem do Pet
+type Pet = {
+  _id: string;
+  nome: string;
+  especie: string;
+  idade: number;
+  porte: string;
+  cidade: string;
+  estado: string;
+  imagens?: string[];
+};
 
 export default function Home() {
+  const [pets, setPets] = useState<Pet[]>([]);  // tipando o estado
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const data = await getPets();
+        setPets(data); // salva os pets recebidos
+      } catch (error) {
+        console.error("❌ Erro ao buscar pets:", error);
+      }
+    };
+
+    fetchPets();
+  }, []);
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-black p-4">
@@ -20,42 +48,27 @@ export default function Home() {
 
       {/* Cards dos pets */}
       <View className="space-y-4">
-        <TouchableOpacity onPress={() => router.push('/pet-details/rex')}>
-          <PetCard
-            nome="Rex"
-            imagem="https://images.unsplash.com/photo-1558788353-f76d92427f16"
-            tags={["Cão", "2 anos", "Dócil", "Pequeno", "Bom com Crianças"]}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.push('/pet-details/mimi')}>
-          <PetCard
-            nome="Mimi"
-            imagem="https://images.unsplash.com/photo-1592194996308-7b43878e84a6"
-            tags={["Gato", "1 mês", "Curioso", "Pequeno"]}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.push('/pet-details/thor')}>
-          <PetCard
-            nome="Thor"
-            imagem="https://images.unsplash.com/photo-1558788353-f76d92427f16"
-            tags={["Cão", "3 anos", "Brincalhão", "Médio"]}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.push('/pet-details/luna')}>
-          <PetCard
-            nome="Luna"
-            imagem="https://images.unsplash.com/photo-1592194996308-7b43878e84a6"
-            tags={["Gata", "2 meses", "Carinhoso", "Pequeno"]}
-          />
-        </TouchableOpacity>
+  {pets.map((pet) => (
+    <TouchableOpacity key={pet._id} /* onPress={() => router.push(`/pet-details/${pet._id}`)} */>
+      <PetCard
+        nome={pet.nome}
+              imagem={pet.imagens?.[0] || 'https://via.placeholder.com/150'}
+              tags={[
+                pet.especie,
+                `${pet.idade} anos`,
+                pet.porte,
+                pet.cidade,
+                pet.estado
+              ]}
+            />
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
   );
 }
 
+// PetCard
 function PetCard({ nome, imagem, tags }: { nome: string; imagem: string; tags: string[] }) {
   return (
     <View className="bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
