@@ -1,15 +1,11 @@
 import { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert, TextInput, Image } from "react-native";
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Button } from '~/components/base/Button';
-import { InputField } from '~/components/base/InputField';
-import { SocialButton } from '~/components/base/SocialButton';
 
-// Tipos TypeScript para melhor organização do código
-type UserType = 'adotante' | 'ong';  // Tipos de usuário suportados
+// Tipos TypeScript
+type UserType = 'adotante' | 'ong';
 
-// Interface para os dados do formulário
 type FormData = {
   nome: string;
   email: string;
@@ -17,17 +13,13 @@ type FormData = {
   senha: string;
   confirmarSenha: string;
   endereco: string;
-  cpf: string;  // Campo específico para adotantes
-  cnpj: string;  // Campo específico para ONGs
+  cpf: string;
+  cnpj: string;
 };
 
 export default function Signup() {
   const router = useRouter();
-  
-  // Estado para controlar o tipo de usuário selecionado
   const [userType, setUserType] = useState<UserType>('adotante');
-  
-  // Estado para armazenar todos os dados do formulário
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     email: '',
@@ -39,16 +31,14 @@ export default function Signup() {
     cnpj: '',
   });
 
-  // Função otimizada para atualizar os campos do formulário
+  // Funções de manipulação
   const handleInputChange = useCallback((field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   }, []);
 
-  // Função para validar todos os campos do formulário
   const validateForm = () => {
     const { nome, email, telefone, senha, confirmarSenha, endereco, cpf, cnpj } = formData;
 
-    // Validação de campos obrigatórios
     if (!nome || !email || !telefone || !senha || !confirmarSenha || !endereco) {
       Alert.alert("Erro", "Preencha todos os campos obrigatórios.");
       return false;
@@ -59,13 +49,11 @@ export default function Signup() {
       return false;
     }
 
-    // Validação específica para ONGs
     if (userType === 'ong' && !cnpj) {
       Alert.alert("Erro", "Informe o CNPJ da ONG.");
       return false;
     }
 
-    // Validação de confirmação de senha
     if (senha !== confirmarSenha) {
       Alert.alert("Erro", "As senhas não coincidem.");
       return false;
@@ -74,134 +62,154 @@ export default function Signup() {
     return true;
   };
 
-  // Função para lidar com o envio do formulário
   const handleSubmit = useCallback(() => {
     if (validateForm()) {
-      // Em produção, aqui viria a chamada à API de cadastro
-      // console.log('Dados do formulário:', formData);
-      
-      // Redireciona para a tela inicial após cadastro
       router.replace('/(tabs)/home');
     }
   }, [formData, router]);
 
-  // Componente reutilizável para os botões de seleção de tipo de usuário
-  const renderUserTypeButton = (type: UserType, iconName: 'person' | 'home', label: string) => (
-    <TouchableOpacity
-      className={`flex-1 p-4 rounded-xl border mx-1 flex-row justify-center items-center gap-2 ${
-        userType === type ? 'bg-emerald-500 border-emerald-500' : 'bg-transparent border-gray-200'
-      }`}
-      onPress={() => setUserType(type)}
-    >
-      {/* Ícone do botão (muda de cor quando selecionado) */}
-      <Ionicons name={iconName} size={32} color={userType === type ? '#fff' : '#666'} />
-      
-      {/* Texto do botão (muda de cor quando selecionado) */}
-      <Text className={`font-bold ${userType === type ? 'text-white' : 'text-gray-600'}`}>
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
-
+  // Renderização
   return (
     <ScrollView className="bg-white">
-      <View className="flex-1 px-6 py-6 items-center justify-center min-h-screen">
-        {/* Títulos da tela */}
+      <View className="flex-1 px-6 py-6 my-6 items-center justify-center min-h-screen">
+        {/* Títulos */}
         <Text className="text-2xl font-bold mb-2 text-gray-800">Crie sua conta</Text>
         <Text className="text-base text-gray-600 mb-8">Selecione o tipo de cadastro</Text>
 
-        {/* Seção de seleção do tipo de usuário */}
+        {/* Seletor de tipo de usuário */}
         <View className="flex-row mb-6 w-full">
-          {renderUserTypeButton('adotante', 'person', 'Sou Adotante')}
-          {renderUserTypeButton('ong', 'home', 'Sou ONG')}
+          <TouchableOpacity
+            className={`flex-1 p-4 rounded-xl border mx-1 flex-row justify-center items-center gap-2 ${
+              userType === 'adotante' ? 'bg-emerald-500 border-emerald-500' : 'bg-transparent border-gray-200'
+            }`}
+            onPress={() => setUserType('adotante')}
+          >
+            <Ionicons name="person" size={24} color={userType === 'adotante' ? '#fff' : '#666'} />
+            <Text className={`font-bold ${userType === 'adotante' ? 'text-white' : 'text-gray-600'}`}>
+              Sou Adotante
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className={`flex-1 p-4 rounded-xl border mx-1 flex-row justify-center items-center gap-2 ${
+              userType === 'ong' ? 'bg-emerald-500 border-emerald-500' : 'bg-transparent border-gray-200'
+            }`}
+            onPress={() => setUserType('ong')}
+          >
+            <Ionicons name="home" size={24} color={userType === 'ong' ? '#fff' : '#666'} />
+            <Text className={`font-bold ${userType === 'ong' ? 'text-white' : 'text-gray-600'}`}>
+              Sou ONG
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Formulário de cadastro */}
+        {/* Formulário */}
         <View className="w-full">
-          {/* Campo de nome */}
-          <InputField
-            value={formData.nome}
-            onChange={text => handleInputChange('nome', text)}
+          {/* Nome */}
+          <TextInput
+            className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 text-base"
             placeholder="Nome"
+            value={formData.nome}
+            onChangeText={text => handleInputChange('nome', text)}
           />
-          
-          {/* Campo de email */}
-          <InputField
-            value={formData.email}
-            onChange={text => handleInputChange('email', text)}
+
+          {/* Email */}
+          <TextInput
+            className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 text-base"
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
+            value={formData.email}
+            onChangeText={text => handleInputChange('email', text)}
           />
-          
-          {/* Campo condicional de CPF (apenas para adotantes) */}
-          {userType === 'adotante' && (
-            <InputField
-              value={formData.cnpj}
-              onChange={text => handleInputChange('cpf', text)}
+
+          {/* CPF/CNPJ */}
+          {userType === 'adotante' ? (
+            <TextInput
+              className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 text-base"
               placeholder="CPF"
               keyboardType="numeric"
+              value={formData.cpf}
+              onChangeText={text => handleInputChange('cpf', text)}
             />
-          )}
-
-          {/* Campo condicional de CNPJ (apenas para ONGs) */}
-          {userType === 'ong' && (
-            <InputField
-              value={formData.cnpj}
-              onChange={text => handleInputChange('cnpj', text)}
+          ) : (
+            <TextInput
+              className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 text-base"
               placeholder="CNPJ"
               keyboardType="numeric"
+              value={formData.cnpj}
+              onChangeText={text => handleInputChange('cnpj', text)}
             />
           )}
-          
-          {/* Campo de telefone */}
-          <InputField
-            value={formData.telefone}
-            onChange={text => handleInputChange('telefone', text)}
+
+          {/* Telefone */}
+          <TextInput
+            className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 text-base"
             placeholder="Telefone"
             keyboardType="phone-pad"
+            value={formData.telefone}
+            onChangeText={text => handleInputChange('telefone', text)}
           />
-          
-          {/* Campo de endereço */}
-          <InputField
-            value={formData.endereco}
-            onChange={text => handleInputChange('endereco', text)}
+
+          {/* Endereço */}
+          <TextInput
+            className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 text-base"
             placeholder="Endereço"
+            value={formData.endereco}
+            onChangeText={text => handleInputChange('endereco', text)}
           />
-          
-          {/* Campo de senha */}
-          <InputField
-            value={formData.senha}
-            onChange={text => handleInputChange('senha', text)}
+
+          {/* Senha */}
+          <TextInput
+            className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 text-base"
             placeholder="Senha"
             secureTextEntry
+            value={formData.senha}
+            onChangeText={text => handleInputChange('senha', text)}
           />
-          
-          {/* Campo de confirmação de senha */}
-          <InputField
-            value={formData.confirmarSenha}
-            onChange={text => handleInputChange('confirmarSenha', text)}
+
+          {/* Confirmar Senha */}
+          <TextInput
+            className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4 text-base"
             placeholder="Confirmar Senha"
             secureTextEntry
+            value={formData.confirmarSenha}
+            onChangeText={text => handleInputChange('confirmarSenha', text)}
           />
 
-          {/* Botão principal de cadastro */}
-          <Button onPress={handleSubmit}>Cadastrar</Button>
+          {/* Botão de Cadastro */}
+          <TouchableOpacity
+            className="bg-emerald-500 py-3 rounded-xl items-center justify-center w-full"
+            activeOpacity={0.7}
+            onPress={handleSubmit}
+          >
+            <Text className="text-white font-bold text-base">Cadastrar</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Divisor visual entre cadastro normal e social */}
+        {/* Divisor */}
         <View className="flex-row items-center my-6 w-full">
           <View className="flex-1 h-px bg-gray-200" />
           <Text className="mx-2 text-gray-500">ou</Text>
           <View className="flex-1 h-px bg-gray-200" />
         </View>
 
-        {/* Botão de cadastro social (GOV.br) */}
-        <SocialButton
+        {/* Botão gov.br */}
+        <TouchableOpacity
+          className="w-full py-3 bg-gray-50 rounded-xl items-center justify-center flex-row border border-gray-200"
+          activeOpacity={0.7}
           onPress={() => router.replace('/(tabs)/home')}
-        />
+        >
+          <Image
+            source={require("../../assets/logo-govbr.png")}
+            style={{ width: 64, height: 24 }}
+            resizeMode="contain"
+            className="mr-3"
+          />
+          <Text className="text-gray-800 font-bold text-base">Entrar com gov.br</Text>
+        </TouchableOpacity>
 
-        {/* Link para tela de login */}
+        {/* Link para login */}
         <View className="flex-row justify-center mt-4">
           <Text className="text-gray-600 mr-2">Já tem uma conta?</Text>
           <TouchableOpacity onPress={() => router.push('./login')}>

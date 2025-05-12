@@ -1,30 +1,13 @@
 import { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Alert } from 'react-native';
+import { View, Text, ScrollView, Alert, TextInput, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Logo } from '~/components/base/Logo';
-import { Button } from '~/components/base/Button';
-import { InputField } from '~/components/base/InputField';
 
-/**
- * Tela NewPassword - Permite aos usuários criar uma nova senha com validação
- * 
- * Funcionalidades:
- * - Validação de força da senha com feedback visual
- * - Verificação de token dos parâmetros da URL
- * - Campos de senha seguros
- * - Estados de carregamento durante o envio
- */
 export default function NewPassword() {
-  // Navegação e manipulação de rotas
   const router = useRouter();
-  const { token } = useLocalSearchParams(); // Token do link de redefinição de senha
-
-  // Gerenciamento de estado do formulário
+  const { token } = useLocalSearchParams();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
-  // Estados para validação dos requisitos da senha
   const [hasMinLength, setHasMinLength] = useState(false);
   const [hasUpperCase, setHasUpperCase] = useState(false);
   const [hasLowerCase, setHasLowerCase] = useState(false);
@@ -32,12 +15,7 @@ export default function NewPassword() {
   const [hasSpecialChar, setHasSpecialChar] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(false);
 
-  /**
-   * Efeito que valida a senha sempre que os campos são alterados
-   * Verifica todos os critérios de complexidade da senha
-   */
   useEffect(() => {
-    // Validação dos critérios de complexidade
     setHasMinLength(newPassword.length >= 8);
     setHasUpperCase(/[A-Z]/.test(newPassword));
     setHasLowerCase(/[a-z]/.test(newPassword));
@@ -46,13 +24,17 @@ export default function NewPassword() {
     setPasswordsMatch(newPassword === confirmPassword && newPassword !== '');
   }, [newPassword, confirmPassword]);
 
-  /**
-   * Função para enviar a nova senha
-   * - Valida os requisitos
-   * - Simula chamada à API
-   * - Gerencia estado de carregamento
-   * - Mostra feedback ao usuário
-   */
+  const isPasswordValid = () => {
+    return (
+      hasMinLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber &&
+      hasSpecialChar &&
+      passwordsMatch
+    );
+  };
+
   const handleSubmit = async () => {
     if (!isPasswordValid()) {
       Alert.alert('Erro', 'Por favor, atenda a todos os requisitos de senha.');
@@ -62,7 +44,6 @@ export default function NewPassword() {
     setIsLoading(true);
     
     try {
-      // Simulação de chamada à API (substituir pela implementação real)
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       Alert.alert(
@@ -77,121 +58,126 @@ export default function NewPassword() {
     }
   };
 
-  /**
-   * Verifica se todos os critérios de senha foram atendidos
-   * @returns boolean - true se a senha for válida
-   */
-  const isPasswordValid = () => {
-    return (
-      hasMinLength &&
-      hasUpperCase &&
-      hasLowerCase &&
-      hasNumber &&
-      hasSpecialChar &&
-      passwordsMatch
-    );
-  };
-
-  /**
-   * Componente para exibir cada regra de senha
-   * @param isValid - Indica se a regra foi atendida
-   * @param text - Texto da regra
-   */
-  const PasswordRule = ({ isValid, text }: { isValid: boolean; text: string }) => (
-    <View className="flex-row items-center mb-1">
-      {/* Bolinha indicadora (verde se válido, cinza se não) */}
-      <View className={`w-2 h-2 rounded-full mr-2 ${isValid ? 'bg-green-500' : 'bg-gray-300'}`} />
-      {/* Texto da regra (verde se válido, cinza se não) */}
-      <Text className={`text-sm ${isValid ? 'text-green-500' : 'text-gray-500'}`}>
-        {text}
-      </Text>
-    </View>
-  );
-
-  // Renderização da tela
   return (
     <ScrollView>
-      {/* Container principal */}
       <View className="flex-1 bg-white px-6 py-6 items-center justify-center min-h-screen">
-        {/* Logo da aplicação */}
-        <Logo size={300} />
+        {/* Logo */}
+        <View className="items-center justify-center my-6">
+          <Image
+            source={require('../../assets/logo.png')}
+            style={{ width: 300 }}
+            resizeMode="contain"
+          />
+        </View>
         
-        {/* Títulos da tela */}
         <Text className="text-2xl font-bold mb-2 text-gray-800">Criar nova senha</Text>
         <Text className="text-base text-gray-600 mb-8 text-center">
           Crie uma nova senha segura para sua conta
         </Text>
 
-        {/* Campo para nova senha */}
+        {/* Campo nova senha */}
         <View className="w-full mb-4">
-          <InputField
-            value={newPassword}
-            onChange={setNewPassword}
+          <TextInput
+            className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-base"
             placeholder="Nova senha"
+            placeholderTextColor="#999"
+            value={newPassword}
+            onChangeText={setNewPassword}
             secureTextEntry
             autoCapitalize="none"
           />
         </View>
 
-        {/* Campo para confirmar nova senha */}
+        {/* Campo confirmar senha */}
         <View className="w-full mb-6">
-          <InputField
-            value={confirmPassword}
-            onChange={setConfirmPassword}
+          <TextInput
+            className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-base"
             placeholder="Confirme a nova senha"
+            placeholderTextColor="#999"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
             secureTextEntry
             autoCapitalize="none"
           />
         </View>
 
-        {/* Lista de requisitos da senha com feedback visual */}
+        {/* Validação da senha */}
         <View className="w-full mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
           <Text className="text-sm font-medium mb-2 text-gray-700">Sua senha deve conter:</Text>
           
-          <PasswordRule 
-            isValid={hasMinLength} 
-            text="No mínimo 8 caracteres" 
-          />
-          <PasswordRule 
-            isValid={hasUpperCase} 
-            text="Pelo menos 1 letra maiúscula" 
-          />
-          <PasswordRule 
-            isValid={hasLowerCase} 
-            text="Pelo menos 1 letra minúscula" 
-          />
-          <PasswordRule 
-            isValid={hasNumber} 
-            text="Pelo menos 1 número" 
-          />
-          <PasswordRule 
-            isValid={hasSpecialChar} 
-            text="Pelo menos 1 caractere especial (!@#$%^&*)" 
-          />
-          <PasswordRule 
-            isValid={passwordsMatch} 
-            text="As senhas devem coincidir" 
-          />
+          {/* Regras de senha */}
+          <View className="flex-row items-center mb-1">
+            <View className={`w-2 h-2 rounded-full mr-2 ${hasMinLength ? 'bg-green-500' : 'bg-gray-300'}`} />
+            <Text className={`text-sm ${hasMinLength ? 'text-green-500' : 'text-gray-500'}`}>
+              No mínimo 8 caracteres
+            </Text>
+          </View>
+          
+          <View className="flex-row items-center mb-1">
+            <View className={`w-2 h-2 rounded-full mr-2 ${hasUpperCase ? 'bg-green-500' : 'bg-gray-300'}`} />
+            <Text className={`text-sm ${hasUpperCase ? 'text-green-500' : 'text-gray-500'}`}>
+              Pelo menos 1 letra maiúscula
+            </Text>
+          </View>
+          
+          <View className="flex-row items-center mb-1">
+            <View className={`w-2 h-2 rounded-full mr-2 ${hasLowerCase ? 'bg-green-500' : 'bg-gray-300'}`} />
+            <Text className={`text-sm ${hasLowerCase ? 'text-green-500' : 'text-gray-500'}`}>
+              Pelo menos 1 letra minúscula
+            </Text>
+          </View>
+          
+          <View className="flex-row items-center mb-1">
+            <View className={`w-2 h-2 rounded-full mr-2 ${hasNumber ? 'bg-green-500' : 'bg-gray-300'}`} />
+            <Text className={`text-sm ${hasNumber ? 'text-green-500' : 'text-gray-500'}`}>
+              Pelo menos 1 número
+            </Text>
+          </View>
+          
+          <View className="flex-row items-center mb-1">
+            <View className={`w-2 h-2 rounded-full mr-2 ${hasSpecialChar ? 'bg-green-500' : 'bg-gray-300'}`} />
+            <Text className={`text-sm ${hasSpecialChar ? 'text-green-500' : 'text-gray-500'}`}>
+              Pelo menos 1 caractere especial (!@#$%^&*)
+            </Text>
+          </View>
+          
+          <View className="flex-row items-center mb-1">
+            <View className={`w-2 h-2 rounded-full mr-2 ${passwordsMatch ? 'bg-green-500' : 'bg-gray-300'}`} />
+            <Text className={`text-sm ${passwordsMatch ? 'text-green-500' : 'text-gray-500'}`}>
+              As senhas devem coincidir
+            </Text>
+          </View>
         </View>
 
-        {/* Botão para submeter a nova senha */}
-        <Button 
+        {/* Botão alterar senha */}
+        <TouchableOpacity
+          className={`bg-emerald-500 py-3 rounded-xl items-center justify-center w-full mb-4 ${
+            !isPasswordValid() || isLoading ? 'opacity-70' : ''
+          }`}
+          activeOpacity={0.7}
           onPress={handleSubmit}
-          variant="primary"
           disabled={!isPasswordValid() || isLoading}
-          className="w-full mb-4"
         >
-          {isLoading ? 'Alterando...' : 'Alterar senha'}
-        </Button>
+          {isLoading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text className="text-white font-bold text-base">Alterar senha</Text>
+          )}
+        </TouchableOpacity>
         
-        {/* Botão para cancelar e voltar */}
-        <Button
+        {/* Botão cancelar */}
+        <TouchableOpacity
+          className="py-3 rounded-xl items-center justify-center w-full"
+          activeOpacity={0.7}
           onPress={() => !isLoading && router.replace('/login')}
-          variant="borderless"
           disabled={isLoading}
         >
-          Cancelar
-        </Button>
+          <Text className={`text-emerald-500 font-bold text-base ${
+            isLoading ? 'opacity-50' : ''
+          }`}>
+            Cancelar
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

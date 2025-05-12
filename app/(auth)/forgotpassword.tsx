@@ -1,133 +1,156 @@
 import { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Alert } from 'react-native';
+import { View, Text, ScrollView, Alert, TextInput, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Logo } from '~/components/base/Logo';
-import { Button } from '~/components/base/Button';
-import { InputField } from '~/components/base/InputField';
-import { SocialButton } from '~/components/base/SocialButton';
 
-// Componente principal para a tela de recuperação de senha
 export default function ForgotPassword() {
   const router = useRouter();
-  // Estado para armazenar o email digitado pelo usuário
   const [email, setEmail] = useState('');
-  // Estado para controlar o loading durante o processamento
   const [isLoading, setIsLoading] = useState(false);
-  // Estado para o contador regressivo (em segundos)
   const [countdown, setCountdown] = useState(0);
 
-  // Efeito para gerenciar o contador regressivo
   useEffect(() => {
     if (countdown > 0) {
-      // Configura um timer para decrementar o contador a cada segundo
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      // Limpa o timer quando o componente é desmontado ou o countdown muda
       return () => clearTimeout(timer);
     }
-  }, [countdown]); // Executa sempre que o countdown é alterado
+  }, [countdown]);
 
-  // Função para lidar com o processo de recuperação de senha
   const handleRecovery = async () => {
-    // Validação: verifica se o email foi informado
     if (!email) {
       Alert.alert('Erro', 'Por favor, informe seu email cadastrado.');
       return;
     }
 
-    // Validação: verifica se o email tem formato válido
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       Alert.alert('Erro', 'Por favor, insira um email válido.');
       return;
     }
 
-    // Inicia o estado de loading
     setIsLoading(true);
     
     try {
-      // Simula uma chamada à API (substituir pela implementação real)
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Exibe mensagem de sucesso
       Alert.alert(
         'Email enviado',
         'Enviamos um link de recuperação para seu email. Por favor, verifique sua caixa de entrada.',
-        [{ text: 'OK', onPress: () => router.back() }] // Volta para tela anterior ao pressionar OK
+        [{ text: 'OK', onPress: () => router.back() }]
       );
       
-      // Inicia o contador de 60 segundos para evitar novos envios
       setCountdown(60);
     } catch (error) {
-      // Tratamento de erro genérico
       Alert.alert('Erro', 'Ocorreu um problema ao enviar o email. Tente novamente.');
     } finally {
-      // Finaliza o estado de loading independente de sucesso ou erro
       setIsLoading(false);
     }
   };
 
-  // Renderização do componente
   return (
     <ScrollView>
-      {/* Container principal */}
       <View className="flex-1 bg-white px-6 py-6 items-center justify-center min-h-screen">
-        {/* Logo da aplicação */}
-        <Logo size={300} />
+        {/* Logo */}
+        <View className="items-center justify-center my-6">
+          <Image
+            source={require('../../assets/logo.png')}
+            style={{ width: 300 }}
+            resizeMode="contain"
+          />
+        </View>
         
-        {/* Título e descrição */}
         <Text className="text-2xl font-bold mb-2 text-gray-800">Recuperar senha</Text>
         <Text className="text-base text-gray-600 mb-8 text-center">
           Informe o email associado à sua conta para receber as instruções
         </Text>
 
-        {/* Área do formulário */}
         <View className="w-full mb-6">
-          {/* Campo de entrada para o email */}
-          <InputField
-            value={email}
-            onChange={setEmail}
-            placeholder="Email"
-            keyboardType="email-address" // Teclado otimizado para emails
-            autoCapitalize="none" // Evita capitalização automática
-          />
+          {/* Campo de email */}
+          <View className="mb-4">
+            <TextInput
+              className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-base"
+              placeholder="Email"
+              placeholderTextColor="#999"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
 
-          {/* Botão principal - Enviar link de recuperação */}
-          <Button 
+          {/* Botão de envio */}
+          <TouchableOpacity
+            className={`bg-emerald-500 py-3 rounded-xl items-center justify-center w-full ${
+              (isLoading || countdown > 0) ? 'opacity-70' : ''
+            }`}
+            activeOpacity={0.7}
             onPress={handleRecovery}
-            variant="primary"
-            disabled={isLoading || countdown > 0} // Desabilita durante loading ou countdown
+            disabled={isLoading || countdown > 0}
           >
             {isLoading ? (
-              'Enviando...' // Texto durante loading
+              <ActivityIndicator color="white" />
             ) : countdown > 0 ? (
-              `Aguarde ${countdown}s` // Mostra contador regressivo
+              <Text className="text-white font-bold text-base">Aguarde {countdown}s</Text>
             ) : (
-              'Enviar link' // Texto padrão
+              <Text className="text-white font-bold text-base">Enviar link</Text>
             )}
-          </Button>
+          </TouchableOpacity>
           
-          {/* Botão secundário - Voltar para login */}
-          <Button
+          {/* Botão de voltar */}
+          <TouchableOpacity
+            className="py-3 rounded-xl items-center justify-center w-full mt-4"
+            activeOpacity={0.7}
             onPress={() => router.back()}
-            variant="borderless" // Estilo sem fundo
-            disabled={isLoading} // Desabilita durante loading
-            className="mt-4" // Margem superior
+            disabled={isLoading}
           >
-            Voltar para login
-          </Button>
+            <Text className={`text-emerald-500 font-bold text-base ${
+              isLoading ? 'opacity-50' : ''
+            }`}>
+              Voltar para login
+            </Text>
+          </TouchableOpacity>
+
+          {/* Botão de voltar */}
+          <TouchableOpacity
+            className="py-3 rounded-xl items-center justify-center w-full mt-4"
+            activeOpacity={0.7}
+            onPress={() => router.push('/(auth)/newpassword')}
+            disabled={isLoading}
+          >
+            <Text className={`font-bold text-base ${
+              isLoading ? 'opacity-50' : ''
+            }`}>
+              Teste Nova Senha
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Divisor visual com texto "ou" no centro */}
+        {/* Divisor */}
         <View className="flex-row items-center mb-6 w-full">
           <View className="flex-1 h-px bg-gray-200" />
           <Text className="mx-2 text-gray-500">ou</Text>
           <View className="flex-1 h-px bg-gray-200" />
         </View>
 
-        {/* Botão de login social (gov.br) */}
-        <SocialButton 
+        {/* Botão gov.br */}
+        <TouchableOpacity
+          className={`w-full py-3 bg-gray-50 rounded-xl items-center justify-center flex-row border ${
+            isLoading ? 'border-gray-300 opacity-70' : 'border-gray-200'
+          }`}
+          activeOpacity={0.7}
           onPress={() => !isLoading && router.replace('/(tabs)/home')}
-          disabled={isLoading} // Desabilita durante loading
-        />
+          disabled={isLoading}
+        >
+          <Image
+            source={require("../../assets/logo-govbr.png")}
+            style={{ width: 64, height: 24 }}
+            resizeMode="contain"
+            className="mr-3"
+          />
+          <Text className={`font-bold text-base ${
+            isLoading ? 'text-gray-500' : 'text-gray-800'
+          }`}>
+            Entrar com gov.br
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
