@@ -17,6 +17,7 @@ type FormData = {
   senha: string;
   confirmarSenha: string;
   endereco: string;
+  cpf: string;  // Campo específico para adotantes
   cnpj: string;  // Campo específico para ONGs
 };
 
@@ -34,6 +35,7 @@ export default function Signup() {
     senha: '',
     confirmarSenha: '',
     endereco: '',
+    cpf: '',
     cnpj: '',
   });
 
@@ -44,11 +46,16 @@ export default function Signup() {
 
   // Função para validar todos os campos do formulário
   const validateForm = () => {
-    const { nome, email, telefone, senha, confirmarSenha, endereco, cnpj } = formData;
+    const { nome, email, telefone, senha, confirmarSenha, endereco, cpf, cnpj } = formData;
 
     // Validação de campos obrigatórios
     if (!nome || !email || !telefone || !senha || !confirmarSenha || !endereco) {
       Alert.alert("Erro", "Preencha todos os campos obrigatórios.");
+      return false;
+    }
+
+    if (userType === 'adotante' && !cpf) {
+      Alert.alert("Erro", "Informe o seu CPF.");
       return false;
     }
 
@@ -71,7 +78,7 @@ export default function Signup() {
   const handleSubmit = useCallback(() => {
     if (validateForm()) {
       // Em produção, aqui viria a chamada à API de cadastro
-      console.log('Dados do formulário:', formData);
+      // console.log('Dados do formulário:', formData);
       
       // Redireciona para a tela inicial após cadastro
       router.replace('/(tabs)/home');
@@ -127,6 +134,16 @@ export default function Signup() {
             autoCapitalize="none"
           />
           
+          {/* Campo condicional de CPF (apenas para adotantes) */}
+          {userType === 'adotante' && (
+            <InputField
+              value={formData.cnpj}
+              onChange={text => handleInputChange('cpf', text)}
+              placeholder="CPF"
+              keyboardType="numeric"
+            />
+          )}
+
           {/* Campo condicional de CNPJ (apenas para ONGs) */}
           {userType === 'ong' && (
             <InputField

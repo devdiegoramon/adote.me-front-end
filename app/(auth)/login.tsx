@@ -22,19 +22,19 @@ export default function Login() {
     }
 
     // Em produção, aqui viria a chamada à API de autenticação
-    console.log('Login com:', { email, senha });
+    // console.log('Login com:', { email, senha });
     
     // Redireciona para a tela inicial após o "login"
     router.replace('/(tabs)/home');
   };
 
   return (
-    <ScrollView>
+    <ScrollView className="bg-white">
       {/* Container principal da tela */}
-      <View className="flex-1 bg-white px-6 py-6 items-center justify-center min-h-screen">
+      <View className="flex-1 px-6 py-6 items-center justify-center min-h-screen">
         
         {/* Componente de Logo - tamanho personalizado */}
-        <Logo size={300} />
+        <Logo size={250} />
 
         {/* Títulos da tela */}
         <Text className="text-2xl font-bold mb-2 text-gray-800">Bem-vindo de volta!</Text>
