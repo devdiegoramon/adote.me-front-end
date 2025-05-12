@@ -48,10 +48,10 @@ export default function Home() {
 
       {/* Cards dos pets */}
       <View className="space-y-4">
-  {pets.map((pet) => (
-    <TouchableOpacity key={pet._id} /* onPress={() => router.push(`/pet-details/${pet._id}`)} */>
-      <PetCard
-        nome={pet.nome}
+        {pets.map((pet) => (
+          <TouchableOpacity key={pet._id} onPress={() => router.push(`/pet-details/${pet._id}`)}>
+            <PetCard
+              nome={pet.nome}
               imagem={pet.imagens?.[0] || 'https://via.placeholder.com/150'}
               tags={[
                 pet.especie,
