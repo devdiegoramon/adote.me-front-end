@@ -6,6 +6,7 @@ import { Button } from '~/components/base/Button';
 import { InputField } from '~/components/base/InputField';
 import { SocialButton } from '~/components/base/SocialButton';
 import { signup } from '~/lib/api/signup'
+import type { SignupPayload } from '~/lib/api/signup';
 
 // Tipos TypeScript para melhor organização do código
 type UserType = 'adotante' | 'ong';  // Tipos de usuário suportados
@@ -72,10 +73,45 @@ export default function Signup() {
  const handleSubmit = useCallback(async () => {
   if (validateForm()) {
     try {
-      const payload = {
-        ...formData,
-        type: userType,
-      };
+      const payload: SignupPayload =
+  userType === 'ong'
+    ? {
+        nome: formData.nome,
+        email: formData.email,
+        telefone: formData.telefone,
+        senha: formData.senha,
+        tipo_usuario: ['ong'], // ✅ Tupla literal
+        ong_info: {
+          nome_ong: formData.nome,
+          cnpj: formData.cnpj,
+          telefone_ong: formData.telefone,
+          endereco: {
+            rua: 'Rua Fictícia',
+            numero: 123,
+            cidade: 'Cidade Exemplo',
+            estado: 'SP',
+          },
+          pets: [],
+        },
+      } as SignupPayload
+    : {
+        nome: formData.nome,
+        email: formData.email,
+        telefone: formData.telefone,
+        senha: formData.senha,
+        tipo_usuario: ['adotante'], // ✅ Tupla literal
+        adotante_info: {
+          endereco: {
+            rua: 'Rua Teste',
+            numero: 999,
+            cidade: 'Teste City',
+            estado: 'EX',
+          },
+        },
+      } as SignupPayload;
+
+
+
 
       const result = await signup(payload);
 
