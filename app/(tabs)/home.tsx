@@ -1,32 +1,25 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
-import { useRouter } from 'expo-router'; 
+import { useRouter } from 'expo-router';
 
 export default function Home() {
-  const router = useRouter(); 
+  const router = useRouter();
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: "#fff", padding: 16 }}>
+    <ScrollView className="flex-1 bg-white dark:bg-black p-4">
       {/* Categorias */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16 }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">
         {["Pequenos", "Cães", "Gatos", "Grandes", "Macho", "Fêmea"].map((categoria, index) => (
           <TouchableOpacity
             key={index}
-            style={{
-              backgroundColor: "#e0f7ef",
-              paddingVertical: 8,
-              paddingHorizontal: 16,
-              borderRadius: 20,
-              marginRight: 8,
-            }}
+            className="bg-emerald-100 dark:bg-emerald-900 py-2 px-4 rounded-full mr-2"
           >
-            <Text style={{ color: "#2ecc71", fontWeight: "bold" }}>{categoria}</Text>
+            <Text className="text-emerald-500 dark:text-emerald-200 font-bold">{categoria}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
       {/* Cards dos pets */}
-      <View style={{ gap: 16 }}>
-        {/* Card 1 - Rex */}
+      <View className="space-y-4">
         <TouchableOpacity onPress={() => router.push('/pet-details/rex')}>
           <PetCard
             nome="Rex"
@@ -35,7 +28,6 @@ export default function Home() {
           />
         </TouchableOpacity>
 
-        {/* Card 2 - Mimi */}
         <TouchableOpacity onPress={() => router.push('/pet-details/mimi')}>
           <PetCard
             nome="Mimi"
@@ -44,7 +36,6 @@ export default function Home() {
           />
         </TouchableOpacity>
 
-        {/* Card 3 - Thor */}
         <TouchableOpacity onPress={() => router.push('/pet-details/thor')}>
           <PetCard
             nome="Thor"
@@ -53,7 +44,6 @@ export default function Home() {
           />
         </TouchableOpacity>
 
-        {/* Card 4 - Luna */}
         <TouchableOpacity onPress={() => router.push('/pet-details/luna')}>
           <PetCard
             nome="Luna"
@@ -68,28 +58,21 @@ export default function Home() {
 
 function PetCard({ nome, imagem, tags }: { nome: string; imagem: string; tags: string[] }) {
   return (
-    <View style={{ backgroundColor: "#f8f8f8", borderRadius: 12, overflow: "hidden", borderWidth: 1, borderColor: "#e0e0e0", elevation: 3 }}>
+    <View className="bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
       <Image
         source={{ uri: imagem }}
-        style={{ width: "100%", height: 200 }}
+        className="w-full h-52"
         resizeMode="cover"
       />
-      <View style={{ padding: 12 }}>
-        <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}>{nome}</Text>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+      <View className="p-3">
+        <Text className="text-lg font-bold text-black dark:text-white mb-2">{nome}</Text>
+        <View className="flex-row flex-wrap">
           {tags.map((tag, index) => (
             <View
               key={index}
-              style={{
-                backgroundColor: "#e0e0e0",
-                paddingVertical: 4,
-                paddingHorizontal: 8,
-                borderRadius: 12,
-                marginRight: 4,
-                marginBottom: 4,
-              }}
+              className="bg-gray-300 dark:bg-gray-700 px-2 py-1 rounded-full mr-1 mb-1"
             >
-              <Text style={{ fontSize: 12 }}>{tag}</Text>
+              <Text className="text-xs text-black dark:text-white">{tag}</Text>
             </View>
           ))}
         </View>

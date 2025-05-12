@@ -8,7 +8,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { ThemeToggle } from '~/components/ThemeToggle';
+import { ThemeToggle } from '~/components/shared/ThemeToggle';
 import { useColorScheme, useInitialAndroidBarSync } from '~/lib/useColorScheme';
 import { NAV_THEME } from '~/theme';
 
@@ -32,26 +32,22 @@ export default function RootLayout() {
         <BottomSheetModalProvider>
           <ActionSheetProvider>
             <NavThemeProvider value={NAV_THEME[colorScheme]}>
-              <Stack screenOptions={SCREEN_OPTIONS}>
-                <Stack.Screen name="(tabs)" options={DRAWER_OPTIONS} />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  animation: 'ios_from_right',
+                }}
+              >
+                <Stack.Screen name="(auth)/login"/>
+                <Stack.Screen name="(tabs)"/>
               </Stack>
             </NavThemeProvider>
           </ActionSheetProvider>
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
-
-      {/* </ExampleProvider> */}
     </>
   );
 }
-
-const SCREEN_OPTIONS = {
-  animation: 'ios_from_right',
-} as const;
-
-const DRAWER_OPTIONS = {
-  headerShown: false,
-} as const;
 
 const MODAL_OPTIONS = {
   presentation: 'modal',
