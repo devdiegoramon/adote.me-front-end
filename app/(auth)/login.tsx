@@ -5,6 +5,8 @@ import { Logo } from '~/components/base/Logo';
 import { Button } from '~/components/base/Button';
 import { InputField } from '~/components/base/InputField';
 import { SocialButton } from '~/components/base/SocialButton';
+import { login } from '~/lib/api/login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
   const router = useRouter();
@@ -14,15 +16,21 @@ export default function Login() {
   const [senha, setSenha] = useState('');
 
   // Função para lidar com o processo de login
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Validação básica - verifica se os campos estão preenchidos
     if (!email || !senha) {
       Alert.alert('Erro', 'Preencha todos os campos.');
       return;
     }
 
-    // Em produção, aqui viria a chamada à API de autenticação
-    console.log('Login com:', { email, senha });
+    try {
+      const response = await login({ email, senha });
+      console.log('Login bem-sucedido:', response);
+      await AsyncStorage.setItem('token', response.token);
+    } catch (error: any) {
+      console.error('Erro no login:', error);
+      Alert.alert('Erro', error.message || 'Falha ao fazer login.');
+    }
     
     // Redireciona para a tela inicial após o "login"
     router.replace('/(tabs)/home');
