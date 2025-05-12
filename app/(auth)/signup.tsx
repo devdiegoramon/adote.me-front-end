@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Button } from '~/components/base/Button';
 import { InputField } from '~/components/base/InputField';
 import { SocialButton } from '~/components/base/SocialButton';
+import { signup } from '~/lib/api/signup'
 
 // Tipos TypeScript para melhor organização do código
 type UserType = 'adotante' | 'ong';  // Tipos de usuário suportados
@@ -68,15 +69,23 @@ export default function Signup() {
   };
 
   // Função para lidar com o envio do formulário
-  const handleSubmit = useCallback(() => {
-    if (validateForm()) {
-      // Em produção, aqui viria a chamada à API de cadastro
-      console.log('Dados do formulário:', formData);
-      
-      // Redireciona para a tela inicial após cadastro
+ const handleSubmit = useCallback(async () => {
+  if (validateForm()) {
+    try {
+      const payload = {
+        ...formData,
+        type: userType,
+      };
+
+      const result = await signup(payload);
+
+      Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
       router.replace('/(tabs)/home');
+    } catch (error: any) {
+      Alert.alert('Erro', error.message);
     }
-  }, [formData, router]);
+  }
+}, [formData, userType, router]);
 
   // Componente reutilizável para os botões de seleção de tipo de usuário
   const renderUserTypeButton = (type: UserType, iconName: 'person' | 'home', label: string) => (
