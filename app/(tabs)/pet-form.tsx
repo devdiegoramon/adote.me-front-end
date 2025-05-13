@@ -28,7 +28,7 @@ export default function PetRegistration() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Manipulador genérico para campos de texto
-  const handleChange = (field: string, value: string | boolean) => {
+  const handleChange = (field: string, value: string | boolean | string[]) => {
     setPetData(prev => ({ ...prev, [field]: value }));
   };
 
