@@ -1,114 +1,119 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, TextInput, Image } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useState } from 'react'
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  Alert,
+  ScrollView
+} from 'react-native'
+import { useRouter } from 'expo-router'
 
-export default function Login() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+export default function LoginScreen() {
+  const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
 
   const handleLogin = () => {
-    if (!email || !senha) {
-      Alert.alert('Erro', 'Preencha todos os campos.');
-      return;
+    if (!email.trim() || !senha.trim()) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos.')
+      return
     }
-    
-    router.replace('/(tabs)/home');
-  };
+
+    // Futuro: autenticação real
+    router.replace('/(tabs)/home')
+  }
 
   return (
-    <ScrollView className="bg-white">
-      <View className="flex-1 px-6 py-6 items-center justify-center min-h-screen">
-        
+    <ScrollView className="flex-1 bg-white" keyboardShouldPersistTaps="handled">
+      <View className="flex-1 justify-center px-6 py-10 min-h-screen">
+
         {/* Logo */}
-        <View className="items-center justify-center my-6">
+        <View className="items-center mb-8">
           <Image
             source={require('../../assets/logo.png')}
-            style={{ width: 250 }}
             resizeMode="contain"
+            style={{ width: 220, height: 80 }}
           />
         </View>
 
-        {/* Títulos */}
-        <Text className="text-2xl font-bold mb-2 text-gray-800">Bem-vindo de volta!</Text>
-        <Text className="text-base text-gray-600 mb-8">Faça login na sua conta</Text>
+        {/* Texto de boas-vindas */}
+        <View className="mb-8">
+          <Text className="text-2xl font-bold text-center text-gray-800 mb-1">
+            Bem-vindo de volta!
+          </Text>
+          <Text className="text-base text-center text-gray-600">
+            Faça login na sua conta
+          </Text>
+        </View>
 
         {/* Formulário */}
-        <View className="w-full mb-6">
-          {/* Campo de email */}
-          <View className="mb-4">
-            <TextInput
-              className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-base"
-              placeholder="Email"
-              placeholderTextColor="#999"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
+        <View className="space-y-4 mb-6">
+          <TextInput
+            className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-base text-gray-800"
+            placeholder="Email"
+            placeholderTextColor="#888"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-base text-gray-800"
+            placeholder="Senha"
+            placeholderTextColor="#888"
+            secureTextEntry
+            value={senha}
+            onChangeText={setSenha}
+          />
 
-          {/* Campo de senha */}
-          <View className="mb-4">
-            <TextInput
-              className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-base"
-              placeholder="Senha"
-              placeholderTextColor="#999"
-              value={senha}
-              onChangeText={setSenha}
-              secureTextEntry
-            />
-          </View>
-
-          {/* Botão de login */}
           <TouchableOpacity
-            className="bg-emerald-500 py-3 rounded-xl items-center justify-center w-full"
-            activeOpacity={0.7}
             onPress={handleLogin}
+            className="bg-emerald-500 rounded-xl py-3 items-center"
+            activeOpacity={0.85}
           >
             <Text className="text-white font-bold text-base">Entrar</Text>
           </TouchableOpacity>
 
-          {/* Botão de esqueci senha */}
           <TouchableOpacity
-            className="py-3 rounded-xl items-center justify-center w-full mt-4"
-            activeOpacity={0.7}
             onPress={() => router.push('/forgotpassword')}
+            className="items-center"
+            activeOpacity={0.8}
           >
-            <Text className="text-emerald-500 font-bold text-base">Esqueceu sua senha?</Text>
+            <Text className="text-emerald-500 font-medium">Esqueceu sua senha?</Text>
           </TouchableOpacity>
         </View>
 
         {/* Divisor */}
-        <View className="flex-row items-center mb-6 w-full">
+        <View className="flex-row items-center my-6">
           <View className="flex-1 h-px bg-gray-200" />
-          <Text className="mx-2 text-gray-500">ou</Text>
+          <Text className="mx-3 text-gray-500 text-sm">ou</Text>
           <View className="flex-1 h-px bg-gray-200" />
         </View>
 
-        {/* Botão gov.br */}
+        {/* Login com gov.br */}
         <TouchableOpacity
-          className="w-full py-3 bg-gray-50 rounded-xl items-center justify-center flex-row border border-gray-200"
-          activeOpacity={0.7}
           onPress={() => router.replace('/(tabs)/home')}
+          className="flex-row items-center justify-center bg-gray-50 border border-gray-300 rounded-xl py-3"
+          activeOpacity={0.85}
         >
           <Image
-            source={require("../../assets/logo-govbr.png")}
-            style={{ width: 64, height: 24 }}
+            source={require('../../assets/logo-govbr.png')}
             resizeMode="contain"
-            className="mr-3"
+            style={{ width: 64, height: 24, marginRight: 8 }}
           />
-          <Text className="text-gray-800 font-bold text-base">Entrar com gov.br</Text>
+          <Text className="text-gray-800 font-semibold text-base">Entrar com gov.br</Text>
         </TouchableOpacity>
 
-        {/* Link para cadastro */}
-        <View className="flex-row justify-center mt-4">
-          <Text className="text-gray-600 mr-2">Não tem uma conta?</Text>
-          <TouchableOpacity onPress={() => router.push('./signup')}>
-            <Text className="text-emerald-500 font-bold">Cadastre-se</Text>
+        {/* Link de cadastro */}
+        <View className="flex-row justify-center mt-8">
+          <Text className="text-gray-600">Não tem uma conta?</Text>
+          <TouchableOpacity onPress={() => router.push('/signup')}>
+            <Text className="text-emerald-500 font-bold ml-2">Cadastre-se</Text>
           </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
-  );
+  )
 }
