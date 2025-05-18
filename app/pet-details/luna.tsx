@@ -1,6 +1,8 @@
 import { View, Text, Image, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 
+const URL = 'http://localhost:3000/download/';
+
 export default function PetDetails() {
   const router = useRouter();
 

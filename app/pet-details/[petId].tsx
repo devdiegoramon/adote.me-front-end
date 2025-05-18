@@ -3,6 +3,8 @@ import {  useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { getPetById } from '../../lib/api/pets'; // Supondo que você tenha essa função
 
+const URL = 'http://localhost:3000/download/';
+
 // Tipagem do Pet
 type Pet = {
     _id: string;
@@ -13,6 +15,7 @@ type Pet = {
     cidade: string;
     estado: string;
     imagens?: string[];
+    foto_url: string;
   };
 
   
@@ -49,7 +52,9 @@ export default function PetDetails() {
   return (
     <ScrollView style={{ flex: 1, padding: 16 }}>
       <Image
-        source={{ uri: pet.imagens[0] }}
+        source={{ uri: pet.foto_url
+    ? `${URL}${pet.foto_url}`
+    : 'https://via.placeholder.com/150'}}
         style={{ width: "100%", height: 300 }}
         resizeMode="cover"
       />
