@@ -2,6 +2,8 @@ import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { getPets } from '../../lib/api/pets';
+const URL = 'http://localhost:3000/download/';
+
 
 // Tipagem do Pet
 type Pet = {
@@ -13,6 +15,7 @@ type Pet = {
   cidade: string;
   estado: string;
   imagens?: string[];
+  foto_url: string;
 };
 
 export default function Home() {
@@ -48,21 +51,29 @@ export default function Home() {
 
       {/* Cards dos pets */}
       <View className="space-y-4">
-        {pets.map((pet) => (
-          <TouchableOpacity key={pet._id} onPress={() => router.push(`/pet-details/${pet._id}`)}>
-            <PetCard
-              nome={pet.nome}
-              imagem={pet.imagens?.[0] || 'https://via.placeholder.com/150'}
-              tags={[
-                pet.especie,
-                `${pet.idade} anos`,
-                pet.porte,
-                pet.cidade,
-                pet.estado
-              ]}
-            />
-          </TouchableOpacity>
-        ))}
+        {pets.map((pet) => {
+  const imageUrl = pet.foto_url
+    ? `${URL}${pet.foto_url}`
+    : 'https://via.placeholder.com/150';
+
+  console.log('🖼️ URL da imagem do pet:', imageUrl);
+
+  return (
+    <TouchableOpacity key={pet._id} onPress={() => router.push(`/pet-details/${pet._id}`)}>
+      <PetCard
+        nome={pet.nome}
+        imagem={imageUrl}
+        tags={[
+          pet.especie,
+          `${pet.idade} anos`,
+          pet.porte,
+          pet.cidade,
+          pet.estado
+        ]}
+      />
+    </TouchableOpacity>
+  );
+})}
       </View>
     </ScrollView>
   );
