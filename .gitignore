@@ -1,68 +1,37 @@
-# Dependências
-node_modules/
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
-# Build
-dist/
-build/
-web-build/
-android/app/build/
-ios/build/
-ios/Pods/
+# dependencies
+node_modules/
 
 # Expo
 .expo/
-.expo-shared/
+dist/
+web-build/
 expo-env.d.ts
 
-# Expo Router (se usar)
-.metro-health-check*
-*.expo/
-*.expo-shared/
-
-# Android/iOS keys & certificados
+# Native
+.kotlin/
+*.orig.*
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
 
-# Logs
+# Metro
+.metro-health-check*
+
+# debug
 npm-debug.*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Configurações de ambiente
-.env
-.env.*.local
-
-# IDEs
-.vscode/
-.idea/
-
-# Cache
-.cache/
-*.tmp
-*.swp
-*.bak
+yarn-debug.*
+yarn-error.*
 
 # macOS
 .DS_Store
+*.pem
 
-# Arquivos de sistema Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
+# local env files
+.env*.local
 
-# Coverage de testes
-coverage/
-
-# Arquivos de conflitos de merge
-*.orig.*
-
-# Tailwind / Nativewind específicos
-nativewind-env.d.ts
-
-# Outros diretórios (caso versionamento de nativo não seja necessário)
-ios/
-android/
+# typescript
+*.tsbuildinfo
