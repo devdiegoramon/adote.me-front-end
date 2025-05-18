@@ -56,8 +56,6 @@ export default function Home() {
     ? `${URL}${pet.foto_url}`
     : 'https://via.placeholder.com/150';
 
-  console.log('🖼️ URL da imagem do pet:', imageUrl);
-
   return (
     <TouchableOpacity key={pet._id} onPress={() => router.push(`/pet-details/${pet._id}`)}>
       <PetCard
