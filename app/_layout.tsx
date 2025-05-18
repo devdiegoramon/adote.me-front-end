@@ -38,19 +38,8 @@ export default function RootLayout() {
                   animation: 'ios_from_right',
                 }}
               >
-                <Stack.Screen 
-                  name="(auth)" 
-                  options={{ 
-                    headerShown: false,
-                    animation: 'fade' 
-                  }} 
-                />
-                <Stack.Screen 
-                  name="(tabs)" 
-                  options={{ 
-                    headerShown: false 
-                  }} 
-                />
+                <Stack.Screen name="(auth)/login"/>
+                <Stack.Screen name="(tabs)"/>
               </Stack>
             </NavThemeProvider>
           </ActionSheetProvider>
