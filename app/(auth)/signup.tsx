@@ -2,9 +2,6 @@ import { useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert, TextInput, Image } from "react-native";
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Button } from '~/components/base/Button';
-import { InputField } from '~/components/base/InputField';
-import { SocialButton } from '~/components/base/SocialButton';
 import { signup } from '~/lib/api/signup'
 import type { SignupPayload } from '~/lib/api/signup';
 
@@ -71,46 +68,44 @@ export default function Signup() {
  const handleSubmit = useCallback(async () => {
   if (validateForm()) {
     try {
-      const payload: SignupPayload =
+     const payload: SignupPayload =
   userType === 'ong'
     ? {
         nome: formData.nome,
         email: formData.email,
         telefone: formData.telefone,
         senha: formData.senha,
-        tipo_usuario: ['ong'], // ✅ Tupla literal
-        ong_info: {
-          nome_ong: formData.nome,
-          cnpj: formData.cnpj,
-          telefone_ong: formData.telefone,
-          endereco: {
-            rua: 'Rua Fictícia',
-            numero: 123,
-            cidade: 'Cidade Exemplo',
-            estado: 'SP',
-          },
-          pets: [],
+        tipo: 'ONG',
+
+        telefone_contato: formData.telefone,
+        whatsapp: '11999999999',
+        cidade: 'Cidade Exemplo',
+        estado: 'SP',
+        cep: '12345-678',
+        endereco: 'Rua Fictícia, 123',
+        coordenadas: [-23.5505, -46.6333],
+        cnpj: formData.cnpj,
+        imagem_url: 'https://example.com/imagem.jpg',
+        redes_sociais: {
+          instagram: 'https://instagram.com/exemplo',
+          facebook: 'https://facebook.com/exemplo',
+          site: 'https://exemplo.org',
         },
-      } as SignupPayload
+      }
     : {
         nome: formData.nome,
         email: formData.email,
         telefone: formData.telefone,
         senha: formData.senha,
-        tipo_usuario: ['adotante'], // ✅ Tupla literal
-        adotante_info: {
-          endereco: {
-            rua: 'Rua Teste',
-            numero: 999,
-            cidade: 'Teste City',
-            estado: 'EX',
-          },
-        },
-      } as SignupPayload;
+        tipo: 'adotante',
+
+        preferencias: ['Gato', 'Pequeno porte'],
+      };
 
 
 
 
+console.log('Payload final:', payload);
       const result = await signup(payload);
 
       Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');

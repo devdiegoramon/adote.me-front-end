@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Logo } from '~/components/base/Logo';
+// import { Logo } from '~/components/base/Logo';
 
 export default function Sucesso() {
   const router = useRouter();
@@ -8,7 +8,7 @@ export default function Sucesso() {
   return (
     <View className="flex-1 items-center justify-center bg-blue-400 px-6">
       
-      <Logo />
+      {/* <Logo /> */}
 
       <Text className="text-white text-center text-2xl font-bold mt-6">
         Você está a um passo de transformar uma vida!

@@ -5,25 +5,29 @@ type CommonPayload = {
   email: string;
   telefone: string;
   senha: string;
+  tipo: 'ONG' | 'adotante'; // <- Alterado aqui
 };
 
 type AdotantePayload = CommonPayload & {
-  tipo_usuario: ['adotante'];
+  tipo: 'adotante';
+  preferencias?: string[]; // <- conforme novo model
 };
 
 type OngPayload = CommonPayload & {
-  tipo_usuario: ['ong'];
-  ong_info: {
-    nome_ong: string;
-    cnpj: string;
-    telefone_ong: string;
-    endereco: {
-      rua: string;
-      numero: number;
-      cidade: string;
-      estado: string;
-    };
-    pets: [];
+  tipo: 'ONG';
+  telefone_contato?: string;
+  whatsapp?: string;
+  cidade?: string;
+  estado?: string;
+  cep?: string;
+  endereco?: string;
+  coordenadas?: [number, number];
+  cnpj?: string;
+  imagem_url?: string;
+  redes_sociais?: {
+    instagram?: string;
+    facebook?: string;
+    site?: string;
   };
 };
 

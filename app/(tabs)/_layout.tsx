@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, View } from "react-native";
-import { Logo } from "~/components/base/Logo";
+// import { Logo } from "~/assets/logo.png";
 import { useRouter } from "expo-router";
 
 export default function TabsLayout() {
@@ -35,7 +35,7 @@ export default function TabsLayout() {
         // Header
         headerTitle: () => (
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Logo size={150} />
+            {/* <Logo size={150} /> */}
           </View>
         ),
         headerRight: () => (
