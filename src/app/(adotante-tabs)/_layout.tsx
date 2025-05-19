@@ -21,29 +21,33 @@ export default function RootLayout() {
               title: "Favoritos",
             }}
           />
+
           <Stack.Screen
             name="home"
             options={{
               headerTitle: () => (
-                <Image
-                  source={require("../../../assets/logo.png")}
-                  style={{ width: 160, height: 40, resizeMode: "contain" }}
-                />
+                <View className="flex-1 items-center justify-center">
+                  <Image
+                    source={require("../../../assets/logo.png")}
+                    style={{ width: 160, height: 40, resizeMode: "contain" }}
+                  />
+                </View>
               ),
               headerBackVisible: false,
             }}
           />
+
           <Stack.Screen
             name="profile"
             options={{
               title: "Perfil",
             }}
           />
-          {/* Adicione a tela pet-details/[id] aqui */}
+
           <Stack.Screen
             name="pet-details/[id]"
             options={{
-              title: "Pets", // Título que aparecerá no header
+              title: "Pets",
             }}
           />
         </Stack>
