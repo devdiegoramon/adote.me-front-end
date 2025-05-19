@@ -142,7 +142,7 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         className="flex-1"
         renderItem={({ item: pet }) => (
-          <View className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row gap-4">
+          <View className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row items-center gap-4">
             <Image
               source={pet.imagem}
               className="w-36 h-36 rounded-xl"
