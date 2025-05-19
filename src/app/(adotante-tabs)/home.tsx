@@ -1,10 +1,11 @@
 import {
   View,
   Text,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   Image,
+  FlatList,
+  ScrollView,
 } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,6 +15,7 @@ import { colors } from "../../styles/colors";
 export default function HomeScreen() {
   const [search, setSearch] = useState("");
   const [showAllFilters, setShowAllFilters] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("");
 
   const pets = [
     {
@@ -66,6 +68,27 @@ export default function HomeScreen() {
     },
   ];
 
+  const filters = [
+    "Cachorros",
+    "Gatos",
+    "Pequeno porte",
+    "Médio porte",
+    "Grande porte",
+  ];
+
+  const filteredPets = pets.filter((pet) => {
+    if (!activeFilter) return true;
+
+    const lowerFilter = activeFilter.toLowerCase();
+
+    return (
+      pet.filtros.some((f) => f.toLowerCase().includes(lowerFilter)) ||
+      pet.porte.toLowerCase().includes(lowerFilter) ||
+      (lowerFilter === "cachorros" && pet.filtros.includes("Cachorro")) ||
+      (lowerFilter === "gatos" && pet.filtros.includes("Gato"))
+    );
+  });
+
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-4 gap-6">
       <View>
@@ -85,30 +108,41 @@ export default function HomeScreen() {
         />
       </View>
 
-      <ScrollView horizontal className="h-16">
-        <TouchableOpacity className="bg-green px-4 justify-center rounded-full">
-          <Text className="text-white font-bold text-sm">Cachorros</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 justify-center rounded-full">
-          <Text className="text-black text-sm">Gatos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 justify-center rounded-full">
-          <Text className="text-black text-sm">Pequeno porte</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 justify-center rounded-full">
-          <Text className="text-black text-sm">Médio porte</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 justify-center rounded-full">
-          <Text className="text-black text-sm">Grande porte</Text>
-        </TouchableOpacity>
-      </ScrollView>
-
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {pets.map((pet) => (
-          <View
-            key={pet.id}
-            className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row gap-4"
+      <FlatList
+        data={filters}
+        keyExtractor={(item) => item}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        className="h-16"
+        renderItem={({ item: filter }) => (
+          <TouchableOpacity
+            onPress={() =>
+              setActiveFilter((prev) => (prev === filter ? "" : filter))
+            }
+            className={`justify-center px-4 py-2 rounded-full ${
+              activeFilter === filter
+                ? "bg-green"
+                : "bg-gray-50 border-2 border-gray-200"
+            }`}
           >
+            <Text
+              className={`text-sm ${
+                activeFilter === filter ? "text-white font-bold" : "text-black"
+              }`}
+            >
+              {filter}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+
+      <FlatList
+        data={filteredPets}
+        keyExtractor={(item) => item.id.toString()}
+        showsVerticalScrollIndicator={false}
+        className="flex-1"
+        renderItem={({ item: pet }) => (
+          <View className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row gap-4">
             <Image
               source={pet.imagem}
               className="w-36 h-36 rounded-xl"
@@ -120,7 +154,7 @@ export default function HomeScreen() {
                 <Text className="text-gray-500">• {pet.idade}</Text>
               </View>
 
-              <View className="flex-row flex-wrap gap-2 items-center">
+              <View className="flex-row flex-wrap items-center">
                 {(showAllFilters ? pet.filtros : pet.filtros.slice(0, 2)).map(
                   (filtro, index) => (
                     <View
@@ -131,7 +165,6 @@ export default function HomeScreen() {
                     </View>
                   )
                 )}
-
                 {pet.filtros.length > 2 && (
                   <Ionicons
                     name={showAllFilters ? "remove-circle" : "add-circle"}
@@ -152,8 +185,8 @@ export default function HomeScreen() {
               </View>
             </View>
           </View>
-        ))}
-      </ScrollView>
+        )}
+      />
     </SafeAreaView>
   );
 }
