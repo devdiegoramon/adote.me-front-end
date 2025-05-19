@@ -39,6 +39,13 @@ export default function RootLayout() {
               title: "Perfil",
             }}
           />
+          {/* Adicione a tela pet-details/[id] aqui */}
+          <Stack.Screen
+            name="pet-details/[id]"
+            options={{
+              title: "Pets", // Título que aparecerá no header
+            }}
+          />
         </Stack>
       </View>
 

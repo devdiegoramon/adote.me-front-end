@@ -30,7 +30,7 @@ export default function ProfileScreen() {
       </View>
 
       <View className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-2">
-        <Text className="text-xs text-gray-500">CPF</Text>
+        <Text className="text-xs text-gray-500">CNPJ</Text>
         <Text className="text-base text-black font-medium">{user.cnpj}</Text>
       </View>
 

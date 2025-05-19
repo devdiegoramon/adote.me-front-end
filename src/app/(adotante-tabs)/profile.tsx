@@ -1,14 +1,9 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { mockAdotante } from "../mock/adotante";
 
 export default function ProfileScreen() {
-  const user = {
-    nome: "Rodrigo Silva",
-    email: "rodrigo@email.com",
-    telefone: "(81) 91234-5678",
-    cpf: "123.456.789-00",
-    endereco: "Rua das Flores, 123 - Recife, PE",
-  };
+  const user = mockAdotante;
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-6 gap-4">

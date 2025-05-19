@@ -3,34 +3,13 @@ import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../styles/colors";
+import { mockAdotante } from "../mock/adotante";
+import { mockPets } from "../mock/pets";
 
 export default function FavoritesScreen() {
-  const [favoritos, setFavoritos] = useState([
-    {
-      id: 1,
-      nome: "Bolt",
-      idade: "2 anos",
-      porte: "Médio",
-      local: "Recife - PE",
-      filtros: ["Cachorro", "Carinhoso", "Bom com crianças"],
-      ong: "Amigos de Pata",
-      imagem: {
-        uri: "https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?q=80&w=1972",
-      },
-    },
-    {
-      id: 2,
-      nome: "Luna",
-      idade: "1 ano",
-      porte: "Pequeno",
-      local: "Olinda - PE",
-      filtros: ["Gato", "Independente", "Calmo"],
-      ong: "Lar do Coração Animal",
-      imagem: {
-        uri: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=2030",
-      },
-    },
-  ]);
+  const [favoritos, setFavoritos] = useState(
+    mockPets.filter((pet) => mockAdotante.favoritos.includes(pet.id))
+  );
 
   const toggleFavorito = (id: number) => {
     setFavoritos((prev) => prev.filter((pet) => pet.id !== id));
@@ -68,7 +47,7 @@ export default function FavoritesScreen() {
                 </TouchableOpacity>
               </View>
 
-              <View className="flex-row flex-wrap gap-2 overflow-hidden">
+              <View className="flex-row overflow-hidden">
                 {pet.filtros.map((filtro, index) => (
                   <View
                     key={index}

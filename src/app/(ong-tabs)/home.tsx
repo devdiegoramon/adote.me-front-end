@@ -11,38 +11,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../styles/colors";
 import { Link } from "expo-router";
+import { mockPets } from "../mock/pets"; // Ajuste o caminho se necessário
+
+export type Pet = {
+  id: number;
+  nome: string;
+  idade: string;
+  porte: string;
+  local: string;
+  filtros: string[];
+  ong: string;
+  imagem: {
+    uri: string;
+  };
+};
 
 export default function HomeOngScreen() {
   const [search, setSearch] = useState("");
 
-  const pets = [
-    {
-      id: 1,
-      nome: "Bolt",
-      idade: "2 anos",
-      porte: "Médio",
-      local: "Recife - PE",
-      filtros: ["Cachorro", "Carinhoso", "Bom com crianças"],
-      status: "Disponível",
-      imagem: {
-        uri: "https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?q=80&w=1972&auto=format&fit=crop",
-      },
-    },
-    {
-      id: 2,
-      nome: "Luna",
-      idade: "1 ano",
-      porte: "Pequeno",
-      local: "Olinda - PE",
-      filtros: ["Gato", "Independente", "Calmo"],
-      status: "Pendente",
-      imagem: {
-        uri: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=2030&auto=format&fit=crop",
-      },
-    },
-  ];
-
-  const renderPet = ({ item: pet }) => (
+  const renderPet = ({ item: pet }: { item: Pet }) => (
     <View
       key={pet.id}
       className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row gap-4"
@@ -58,16 +45,8 @@ export default function HomeOngScreen() {
             <Text className="text-lg font-bold text-black">{pet.nome}</Text>
             <Text className="text-gray-500">• {pet.idade}</Text>
           </View>
-          <View
-            className={`px-2 py-1 rounded-full ${
-              pet.status === "Disponível"
-                ? "bg-blue-500"
-                : pet.status === "Pendente"
-                ? "bg-yellow-500"
-                : "bg-red-500"
-            }`}
-          >
-            <Text className="text-xs font-bold text-white">{pet.status}</Text>
+          <View className="px-2 py-1 rounded-full bg-blue-500">
+            <Text className="text-xs font-bold text-white">Disponível</Text>
           </View>
         </View>
 
@@ -121,7 +100,7 @@ export default function HomeOngScreen() {
       </View>
 
       <FlatList
-        data={pets}
+        data={mockPets}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderPet}
         showsVerticalScrollIndicator={false}
