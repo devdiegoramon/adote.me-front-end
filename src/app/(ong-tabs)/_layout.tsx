@@ -6,14 +6,22 @@ export default function RootLayout() {
   const path = usePathname();
 
   const tabs = [
+    { name: "Pet", route: "/pet-register" },
     { name: "Home", route: "/home" },
-    { name: "Cadastro de Pet", route: "/pet-register" },
+    { name: "Solicitações", route: "/requests" },
+    { name: "Perfil", route: "/profile" },
   ];
 
   return (
     <View className="flex-1 bg-white">
       <View className="flex-1">
         <Stack>
+          <Stack.Screen
+            name="pet-register"
+            options={{
+              title: "Cadastro de Pet",
+            }}
+          />
           <Stack.Screen
             name="home"
             options={{
@@ -27,9 +35,15 @@ export default function RootLayout() {
             }}
           />
           <Stack.Screen
-            name="pet-register"
+            name="requests"
             options={{
-              title: "Cadastro de Pet",
+              title: "Solicitações",
+            }}
+          />
+          <Stack.Screen
+            name="profile"
+            options={{
+              title: "Perfil",
             }}
           />
         </Stack>

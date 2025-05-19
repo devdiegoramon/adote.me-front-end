@@ -5,17 +5,15 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-  ScrollView,
 } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../styles/colors";
 
-export default function HomeScreen() {
+export default function HomeAdotanteScreen() {
   const [search, setSearch] = useState("");
   const [showAllFilters, setShowAllFilters] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("");
 
   const pets = [
     {
@@ -27,7 +25,7 @@ export default function HomeScreen() {
       filtros: ["Cachorro", "Carinhoso", "Bom com crianças"],
       ong: "Amigos de Pata",
       imagem: {
-        uri: "https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?q=80&w=1972&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        uri: "https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?q=80&w=1972",
       },
     },
     {
@@ -39,7 +37,7 @@ export default function HomeScreen() {
       filtros: ["Gato", "Independente", "Calmo"],
       ong: "Lar do Coração Animal",
       imagem: {
-        uri: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=2030&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        uri: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=2030",
       },
     },
     {
@@ -51,7 +49,7 @@ export default function HomeScreen() {
       filtros: ["Cachorro", "Protetor", "Bom com outros animais"],
       ong: "Projeto Patinhas Felizes",
       imagem: {
-        uri: "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        uri: "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?q=80&w=2000",
       },
     },
     {
@@ -63,31 +61,10 @@ export default function HomeScreen() {
       filtros: ["Gato", "Curioso", "Calmo"],
       ong: "Refúgio Animal",
       imagem: {
-        uri: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        uri: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=2000",
       },
     },
   ];
-
-  const filters = [
-    "Cachorros",
-    "Gatos",
-    "Pequeno porte",
-    "Médio porte",
-    "Grande porte",
-  ];
-
-  const filteredPets = pets.filter((pet) => {
-    if (!activeFilter) return true;
-
-    const lowerFilter = activeFilter.toLowerCase();
-
-    return (
-      pet.filtros.some((f) => f.toLowerCase().includes(lowerFilter)) ||
-      pet.porte.toLowerCase().includes(lowerFilter) ||
-      (lowerFilter === "cachorros" && pet.filtros.includes("Cachorro")) ||
-      (lowerFilter === "gatos" && pet.filtros.includes("Gato"))
-    );
-  });
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-4 gap-6">
@@ -109,38 +86,9 @@ export default function HomeScreen() {
       </View>
 
       <FlatList
-        data={filters}
-        keyExtractor={(item) => item}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        className="h-16"
-        renderItem={({ item: filter }) => (
-          <TouchableOpacity
-            onPress={() =>
-              setActiveFilter((prev) => (prev === filter ? "" : filter))
-            }
-            className={`justify-center px-4 py-2 rounded-full ${
-              activeFilter === filter
-                ? "bg-green"
-                : "bg-gray-50 border-2 border-gray-200"
-            }`}
-          >
-            <Text
-              className={`text-sm ${
-                activeFilter === filter ? "text-white font-bold" : "text-black"
-              }`}
-            >
-              {filter}
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
-
-      <FlatList
-        data={filteredPets}
+        data={pets}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-        className="flex-1"
         renderItem={({ item: pet }) => (
           <View className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row items-center gap-4">
             <Image
@@ -154,7 +102,7 @@ export default function HomeScreen() {
                 <Text className="text-gray-500">• {pet.idade}</Text>
               </View>
 
-              <View className="flex-row flex-wrap items-center">
+              <View className="flex-row flex-wrap gap-2 items-center">
                 {(showAllFilters ? pet.filtros : pet.filtros.slice(0, 2)).map(
                   (filtro, index) => (
                     <View

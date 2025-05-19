@@ -5,7 +5,10 @@ export default function RootLayout() {
   const router = useRouter();
   const path = usePathname();
 
-  const tabs = [{ name: "Home", route: "/home" }];
+  const tabs = [
+    { name: "Perfil", route: "/profile" },
+    { name: "Home", route: "/home" },
+  ];
 
   return (
     <View className="flex-1 bg-white">
@@ -24,9 +27,9 @@ export default function RootLayout() {
             }}
           />
           <Stack.Screen
-            name="pet-register"
+            name="profile"
             options={{
-              title: "Cadastro de Pet",
+              title: "Perfil",
             }}
           />
         </Stack>
