@@ -1,16 +1,31 @@
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Switch,
+} from "react-native";
 import { useState } from "react";
 import { Link, router } from "expo-router";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [isOng, setIsOng] = useState(false);
+
+  const toggleSwitch = () => setIsOng((previous) => !previous);
 
   const handleLogin = () => {
     console.log("Email:", email);
     console.log("Senha:", senha);
+    console.log("Sou ONG:", isOng);
 
-    router.replace("/home");
+    if (isOng) {
+      router.replace("/(ong-tabs)/home");
+    } else {
+      router.replace("/(adotante-tabs)/home");
+    }
   };
 
   return (
@@ -20,10 +35,23 @@ export default function LoginScreen() {
         className="w-64"
         resizeMode="contain"
       />
-      
+
       <View className="items-center">
-        <Text className="text-3xl font-bold text-black">Bem-vindo de volta!</Text>
+        <Text className="text-3xl font-bold text-black">
+          Bem-vindo de volta!
+        </Text>
         <Text className="text-xl text-gray-500">Faça login na sua conta</Text>
+      </View>
+
+      {/* Switch "Sou ONG" */}
+      <View className="flex-row items-center justify-between w-full px-2">
+        <Text className="text-black font-bold text-lg">Sou ONG</Text>
+        <Switch
+          value={isOng}
+          onValueChange={toggleSwitch}
+          thumbColor="#ffffff"
+          trackColor={{ true: "#22c55e", false: "#ccc" }} // verde ou cinza
+        />
       </View>
 
       <View className="w-full gap-4">
@@ -49,18 +77,19 @@ export default function LoginScreen() {
         className="w-full bg-green rounded-xl px-4 py-4"
         onPress={handleLogin}
       >
-        <Text className="text-white text-center font-bold text-xl">
-          Entrar
-        </Text>
+        <Text className="text-white text-center font-bold text-xl">Entrar</Text>
       </TouchableOpacity>
 
-      <Link href="/forgetpassword" className="text-green text-center font-bold px-4 py-4 w-full">
+      <Link
+        href="/forgetpassword"
+        className="text-green text-center font-bold px-4 py-4 w-full"
+      >
         Esqueceu sua senha?
       </Link>
 
       <View className="flex-row items-center gap-4">
         <View className="flex-1 h-px bg-gray-200" />
-          <Text className="text-gray-500 font-medium">ou</Text>
+        <Text className="text-gray-500 font-medium">ou</Text>
         <View className="flex-1 h-px bg-gray-200" />
       </View>
 
@@ -75,9 +104,9 @@ export default function LoginScreen() {
 
       <View className="flex-row">
         <Text className="text-black">Não tem uma conta? </Text>
-          <Link href="/register" className="text-green font-bold">
-            Cadastre-se
-          </Link>
+        <Link href="/register" className="text-green font-bold">
+          Cadastre-se
+        </Link>
       </View>
     </View>
   );
