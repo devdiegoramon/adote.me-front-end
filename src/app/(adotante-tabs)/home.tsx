@@ -13,7 +13,7 @@ import { colors } from "../../styles/colors";
 
 export default function HomeAdotanteScreen() {
   const [search, setSearch] = useState("");
-  const [showAllFilters, setShowAllFilters] = useState(false);
+  const [favoritos, setFavoritos] = useState<number[]>([]); // IDs dos pets curtidos
 
   const pets = [
     {
@@ -66,6 +66,12 @@ export default function HomeAdotanteScreen() {
     },
   ];
 
+  const toggleFavorito = (id: number) => {
+    setFavoritos((prev) =>
+      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
+    );
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-4 gap-6">
       <View>
@@ -90,37 +96,41 @@ export default function HomeAdotanteScreen() {
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
         renderItem={({ item: pet }) => (
-          <View className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row items-center gap-4">
+          <View className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row gap-4">
             <Image
               source={pet.imagem}
               className="w-36 h-36 rounded-xl"
               resizeMode="cover"
             />
+
             <View className="flex-1 gap-2">
-              <View className="flex-row items-center gap-2">
-                <Text className="text-lg font-bold text-black">{pet.nome}</Text>
-                <Text className="text-gray-500">• {pet.idade}</Text>
+              <View className="flex-row justify-between items-center">
+                <View className="flex-row items-center gap-2">
+                  <Text className="text-lg font-bold text-black">
+                    {pet.nome}
+                  </Text>
+                  <Text className="text-gray-500">• {pet.idade}</Text>
+                </View>
+                <TouchableOpacity onPress={() => toggleFavorito(pet.id)}>
+                  <Ionicons
+                    name={
+                      favoritos.includes(pet.id) ? "heart" : "heart-outline"
+                    }
+                    size={24}
+                    color={colors.green}
+                  />
+                </TouchableOpacity>
               </View>
 
-              <View className="flex-row flex-wrap gap-2 items-center">
-                {(showAllFilters ? pet.filtros : pet.filtros.slice(0, 2)).map(
-                  (filtro, index) => (
-                    <View
-                      key={index}
-                      className="bg-gray-100 border border-gray-200 px-2 py-2 rounded-full"
-                    >
-                      <Text className="text-black text-xs">{filtro}</Text>
-                    </View>
-                  )
-                )}
-                {pet.filtros.length > 2 && (
-                  <Ionicons
-                    name={showAllFilters ? "remove-circle" : "add-circle"}
-                    size={32}
-                    color={colors.green}
-                    onPress={() => setShowAllFilters(!showAllFilters)}
-                  />
-                )}
+              <View className="flex-row overflow-hidden">
+                {pet.filtros.map((filtro, index) => (
+                  <View
+                    key={index}
+                    className="bg-gray-100 border border-gray-200 px-2 py-2 rounded-full"
+                  >
+                    <Text className="text-black text-xs">{filtro}</Text>
+                  </View>
+                ))}
               </View>
 
               <View className="flex-row items-center gap-2">

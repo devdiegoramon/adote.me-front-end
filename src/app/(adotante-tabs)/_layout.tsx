@@ -6,14 +6,21 @@ export default function RootLayout() {
   const path = usePathname();
 
   const tabs = [
-    { name: "Perfil", route: "/profile" },
+    { name: "Favoritos", route: "/favorites" },
     { name: "Home", route: "/home" },
+    { name: "Perfil", route: "/profile" },
   ];
 
   return (
     <View className="flex-1 bg-white">
       <View className="flex-1">
         <Stack>
+          <Stack.Screen
+            name="favorites"
+            options={{
+              title: "Favoritos",
+            }}
+          />
           <Stack.Screen
             name="home"
             options={{

@@ -6,7 +6,7 @@ export default function RootLayout() {
   const path = usePathname();
 
   const tabs = [
-    { name: "Pet", route: "/pet-register" },
+    { name: "Novo Pet", route: "/pet-register" },
     { name: "Home", route: "/home" },
     { name: "Solicitações", route: "/requests" },
     { name: "Perfil", route: "/profile" },
