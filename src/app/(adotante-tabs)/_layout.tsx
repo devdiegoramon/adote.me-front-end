@@ -5,9 +5,7 @@ export default function RootLayout() {
   const router = useRouter();
   const path = usePathname();
 
-  const tabs = [
-    { name: "Home", route: "/home" },
-  ];
+  const tabs = [{ name: "Home", route: "/home" }];
 
   return (
     <View className="flex-1 bg-white">

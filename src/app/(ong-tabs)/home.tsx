@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -38,13 +45,19 @@ export default function HomeOngScreen() {
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-4 gap-6">
       <View>
-        <Text className="text-2xl font-bold text-black">Olá, Amigos de Pata!</Text>
-        <Text className="text-gray-500">Gerencie seus pets e acompanhe solicitações</Text>
+        <Text className="text-2xl font-bold text-black">
+          Olá, Amigos de Pata!
+        </Text>
+        <Text className="text-gray-500">
+          Gerencie seus pets e acompanhe solicitações
+        </Text>
       </View>
 
       <View className="flex-row gap-2">
         <TouchableOpacity className="flex-1 bg-green px-4 py-3 rounded-xl items-center">
-          <Link href={"pet-register"} className="text-white font-bold">Cadastrar Novo Pet</Link>
+          <Link href={"pet-register"} className="text-white font-bold">
+            Cadastrar Novo Pet
+          </Link>
         </TouchableOpacity>
         <TouchableOpacity className="flex-1 border-2 border-green px-4 py-3 rounded-xl items-center">
           <Text className="text-green font-bold">Ver Solicitações</Text>
@@ -75,23 +88,32 @@ export default function HomeOngScreen() {
             <View className="flex-1 gap-2">
               <View className="flex-row items-center gap-2 justify-between">
                 <View className="flex-row items-center gap-2">
-                  <Text className="text-lg font-bold text-black">{pet.nome}</Text>
+                  <Text className="text-lg font-bold text-black">
+                    {pet.nome}
+                  </Text>
                   <Text className="text-gray-500">• {pet.idade}</Text>
                 </View>
-                <View className={`px-2 py-1 rounded-full ${
-                  pet.status === "Disponível"
-                    ? "bg-blue-500"
-                    : pet.status === "Pendente"
-                    ? "bg-yellow-500"
-                    : "bg-red-500"
-                }`}>
-                  <Text className="text-xs font-bold text-white">{pet.status}</Text>
+                <View
+                  className={`px-2 py-1 rounded-full ${
+                    pet.status === "Disponível"
+                      ? "bg-blue-500"
+                      : pet.status === "Pendente"
+                      ? "bg-yellow-500"
+                      : "bg-red-500"
+                  }`}
+                >
+                  <Text className="text-xs font-bold text-white">
+                    {pet.status}
+                  </Text>
                 </View>
               </View>
 
               <View className="flex-row flex-wrap gap-2">
                 {pet.filtros.map((filtro, index) => (
-                  <View key={index} className="bg-gray-100 border border-gray-200 px-2 py-2 rounded-full">
+                  <View
+                    key={index}
+                    className="bg-gray-100 border border-gray-200 px-2 py-2 rounded-full"
+                  >
                     <Text className="text-black text-xs">{filtro}</Text>
                   </View>
                 ))}

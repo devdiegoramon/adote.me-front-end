@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,6 +13,7 @@ import { colors } from "../../styles/colors";
 
 export default function HomeScreen() {
   const [search, setSearch] = useState("");
+  const [showAllFilters, setShowAllFilters] = useState(false);
 
   const pets = [
     {
@@ -62,7 +70,9 @@ export default function HomeScreen() {
     <SafeAreaView className="flex-1 bg-white px-4 py-4 gap-6">
       <View>
         <Text className="text-2xl font-bold text-black">Olá, Rodrigo!</Text>
-        <Text className="text-gray-500">Aqui estão alguns pets que combinam com você</Text>
+        <Text className="text-gray-500">
+          Aqui estão alguns pets que combinam com você
+        </Text>
       </View>
 
       <View className="flex-row items-center bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-2 gap-2">
@@ -75,23 +85,23 @@ export default function HomeScreen() {
         />
       </View>
 
-      <View className="flex-row flex-wrap gap-2">
-        <TouchableOpacity className="bg-green px-4 py-2 rounded-full">
+      <ScrollView horizontal className="h-16">
+        <TouchableOpacity className="bg-green px-4 justify-center rounded-full">
           <Text className="text-white font-bold text-sm">Cachorros</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 py-2 rounded-full">
+        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 justify-center rounded-full">
           <Text className="text-black text-sm">Gatos</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 py-2 rounded-full">
+        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 justify-center rounded-full">
           <Text className="text-black text-sm">Pequeno porte</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 py-2 rounded-full">
+        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 justify-center rounded-full">
           <Text className="text-black text-sm">Médio porte</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 py-2 rounded-full">
+        <TouchableOpacity className="bg-gray-50 border-2 border-gray-200 px-4 justify-center rounded-full">
           <Text className="text-black text-sm">Grande porte</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {pets.map((pet) => (
@@ -110,12 +120,26 @@ export default function HomeScreen() {
                 <Text className="text-gray-500">• {pet.idade}</Text>
               </View>
 
-              <View className="flex-row flex-wrap gap-2">
-                {pet.filtros.map((filtro, index) => (
-                  <View key={index} className="bg-gray-100 border border-gray-200 px-2 py-2 rounded-full">
-                    <Text className="text-black text-xs">{filtro}</Text>
-                  </View>
-                ))}
+              <View className="flex-row flex-wrap gap-2 items-center">
+                {(showAllFilters ? pet.filtros : pet.filtros.slice(0, 2)).map(
+                  (filtro, index) => (
+                    <View
+                      key={index}
+                      className="bg-gray-100 border border-gray-200 px-2 py-2 rounded-full"
+                    >
+                      <Text className="text-black text-xs">{filtro}</Text>
+                    </View>
+                  )
+                )}
+
+                {pet.filtros.length > 2 && (
+                  <Ionicons
+                    name={showAllFilters ? "remove-circle" : "add-circle"}
+                    size={32}
+                    color={colors.green}
+                    onPress={() => setShowAllFilters(!showAllFilters)}
+                  />
+                )}
               </View>
 
               <View className="flex-row items-center gap-2">
