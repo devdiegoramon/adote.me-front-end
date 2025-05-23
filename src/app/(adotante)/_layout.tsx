@@ -16,13 +16,6 @@ export default function RootLayout() {
       <View className="flex-1">
         <Stack>
           <Stack.Screen
-            name="favorites"
-            options={{
-              title: "Favoritos",
-            }}
-          />
-
-          <Stack.Screen
             name="home"
             options={{
               headerTitle: () => (
