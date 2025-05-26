@@ -5,9 +5,12 @@ import {
   TouchableOpacity,
   Image,
   Switch,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { Link, router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { login } from "../../../lib/api/login"; // ajuste o caminho conforme seu projeto
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -16,15 +19,26 @@ export default function LoginScreen() {
 
   const toggleSwitch = () => setIsOng((previous) => !previous);
 
-  const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Senha:", senha);
-    console.log("Sou ONG:", isOng);
+  const handleLogin = async () => {
+    if (!email || !senha) {
+      Alert.alert("Erro", "Preencha todos os campos.");
+      return;
+    }
 
-    if (isOng) {
-      router.replace("/(ong-tabs)/home");
-    } else {
-      router.replace("/(adotante-tabs)/home");
+    try {
+      const response = await login({ email, senha });
+      console.log("Login bem-sucedido:", response);
+      await AsyncStorage.setItem("token", response.token);
+
+      // redireciona para rota diferente dependendo do tipo
+      if (isOng) {
+        router.replace("/(ong-tabs)/home");
+      } else {
+        router.replace("/(adotante-tabs)/home");
+      }
+    } catch (error: any) {
+      console.error("Erro no login:", error);
+      Alert.alert("Erro", error.message || "Falha ao fazer login.");
     }
   };
 
@@ -50,7 +64,7 @@ export default function LoginScreen() {
           value={isOng}
           onValueChange={toggleSwitch}
           thumbColor="#ffffff"
-          trackColor={{ true: "#22c55e", false: "#ccc" }} // verde ou cinza
+          trackColor={{ true: "#22c55e", false: "#ccc" }}
         />
       </View>
 
@@ -93,7 +107,7 @@ export default function LoginScreen() {
         <View className="flex-1 h-px bg-gray-200" />
       </View>
 
-      <TouchableOpacity className="w-full border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 placeholder:text-gray-400 flex-row items-center justify-center gap-4">
+      <TouchableOpacity className="w-full border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 flex-row items-center justify-center gap-4">
         <Image
           source={require("../../../assets/govbr-logo.png")}
           className="w-16 h-6"
