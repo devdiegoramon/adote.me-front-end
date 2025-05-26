@@ -1,6 +1,8 @@
 import { SafeAreaView, ScrollView, View, Text, Switch, TextInput, TouchableOpacity, Image } from "react-native";
 import { useState } from "react";
 import { Link, router } from "expo-router";
+import { signup } from '../../../lib/api/signup';
+import { SignupPayload } from '../../../lib/api/signup';
 
 export default function CadastroScreen() {
   const [nome, setNome] = useState("");
@@ -14,19 +16,49 @@ export default function CadastroScreen() {
 
   const toggleSwitch = () => setIsOng(previous => !previous);
 
-  const handleRegister = () => {
-    if (!nome || !email || !cpfOuCnpj || !telefone || !endereco || !senha || !confirmarSenha) {
-      alert("Preencha todos os campos.");
-      return;
-    }
+  const handleRegister = async () => {
+  if (!nome || !email || !cpfOuCnpj || !telefone || !endereco || !senha || !confirmarSenha) {
+    alert("Preencha todos os campos.");
+    return;
+  }
 
-    if (senha !== confirmarSenha) {
-      alert("As senhas não coincidem.");
-      return;
-    }
+  if (senha !== confirmarSenha) {
+    alert("As senhas não coincidem.");
+    return;
+  }
 
+  try {
+    const payload: SignupPayload = isOng
+      ? {
+          nome,
+          email,
+          telefone,
+          senha,
+          tipo: "ONG",
+          cnpj: cpfOuCnpj,
+          cidade: "Cidade Exemplo", // ajuste conforme necessário
+          estado: "SP",              // ajuste conforme necessário
+          endereco: {
+            logradouro: endereco,
+            bairro: "Centro",       // se não tiver campo na tela, defina default
+          },
+        }
+      : {
+          nome,
+          email,
+          telefone,
+          senha,
+          tipo: "adotante",
+          preferencias: [], // pode preencher com dados reais se quiser
+        };
+
+    await signup(payload);
+    alert("Cadastro realizado com sucesso!");
     router.replace("/home");
-  };
+  } catch (error: any) {
+    alert(error?.message || "Erro ao cadastrar.");
+  }
+};
 
   return (
     <SafeAreaView className="flex-1 bg-white px-6 py-6">
