@@ -5,20 +5,89 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 import { colors } from "../../../styles/colors";
-import { mockPets } from "../../mock/pets";
-import { useState } from "react";
+import { getPetById }  from "../../../../lib/api/pets"; 
+
+const URL = 'http://localhost:3000/download/';
+
+type Pet = {
+  _id: string;
+  pet_id: number;
+  nome: string;
+  especie: string;
+  porte: string;
+  idade: number;
+  peso: number;
+  castrado: boolean;
+  vacinado: boolean;
+  vermifugado: boolean;
+  microchipado: boolean;
+  sociavelCaes: boolean;
+  sociavelGatos: boolean;
+  sociavelCriancas: boolean;
+  nivelEnergia: string;
+  raca_id: number;
+  personalidades: number[];
+  ong_id: number;
+  coordenadas: {
+    latitude: number;
+    longitude: number;
+  };
+  cidade: string;
+  estado: string;
+  descricao: string;
+  necessidades_especiais: string;
+  imagens: string[];
+  status: {
+    disponivel: boolean;
+    destaque: boolean;
+    data_cadastro: string;
+    data_ultima_atualizacao: string;
+  };
+  foto_url: string;
+};
+
 
 export default function PetDetailsScreen() {
-  const params = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const [pet, setPet] = useState<Pet | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [favorito, setFavorito] = useState(false);
+
   const router = useRouter();
 
-  const pet = mockPets.find((p) => p.id === Number(params.id));
-  const [favorito, setFavorito] = useState(false);
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchPet = async () => {
+      try {
+        const data = await getPetById(id);
+        console.log(data)
+        setPet(data);
+      } catch (error) {
+        console.error("Erro ao buscar pet:", error);
+        Alert.alert("Erro", "Não foi possível carregar os dados do pet.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPet();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color={colors.green} />
+      </SafeAreaView>
+    );
+  }
 
   if (!pet) {
     return (
@@ -31,20 +100,19 @@ export default function PetDetailsScreen() {
     );
   }
 
-  const descricao = `Olá! Eu sou o(a) ${pet.nome}, um(a) pet muito especial e amoroso(a). Estou procurando um lar cheio de carinho e cuidados. Gosto de brincar, receber atenção e sou ótimo(a) companheiro(a) para crianças e adultos. Venha me conhecer!`;
-
   const handleContato = () => {
     Alert.alert(
-      "Contato",
-      `Entrando em contato com a ONG "${pet.ong}" para adoção do(a) ${pet.nome}.`
-    );
+  "Contato",
+  `Entrando em contato com a ONG "${pet.ong_id}" para adoção do(a) ${pet.nome}.`
+);
+
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-4">
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image
-          source={pet.imagem}
+          source={{ uri: `${URL}${pet.foto_url}` }}
           className="w-full h-64 rounded-xl mt-4 mb-6"
           resizeMode="cover"
         />
@@ -61,7 +129,8 @@ export default function PetDetailsScreen() {
           </TouchableOpacity>
         </View>
 
-        <Text className="text-gray-600 mb-1">{pet.ong}</Text>
+        <Text className="text-gray-600 mb-1">{pet.ong_id}</Text>
+
 
         <View className="flex-row justify-center mb-6">
           <View className="flex-1 items-center">
@@ -77,19 +146,19 @@ export default function PetDetailsScreen() {
           <View className="flex-1 items-center">
             <Ionicons name="location" size={24} color={colors.green} />
             <Text className="text-gray-500 mt-1">Local</Text>
-            <Text className="text-lg font-semibold">{pet.local}</Text>
+            <Text className="text-lg font-semibold">{"local"}</Text>
           </View>
         </View>
 
         <View className="mb-6">
           <Text className="text-gray-600 mb-2">Descrição</Text>
-          <Text className="text-gray-800">{descricao}</Text>
+          <Text className="text-gray-800">{pet.descricao}</Text>
         </View>
 
         <View className="mb-6">
           <Text className="text-gray-600 mb-2">Características</Text>
           <View className="flex-row flex-wrap gap-2">
-            {pet.filtros.map((filtro, index) => (
+            {pet.personalidades.map((filtro, index) => (
               <View
                 key={index}
                 className="bg-gray-100 border border-gray-300 px-3 py-1 rounded-full"
@@ -100,7 +169,6 @@ export default function PetDetailsScreen() {
           </View>
         </View>
 
-        {/* Extras */}
         <View className="mb-6 flex-row gap-8 justify-center">
           <View className="items-center">
             <Ionicons name="medkit" size={28} color={colors.green} />
