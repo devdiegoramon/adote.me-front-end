@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Button,
 } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -32,6 +33,9 @@ export default function HomeAdotanteScreen() {
         <Text className="text-gray-500">
           Aqui estão alguns pets que combinam com você
         </Text>
+        <Link href={'recomendation'}>
+          <Button title="Recomendações" />
+        </Link>
       </View>
 
       <View className="flex-row items-center bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-2 gap-2">
