@@ -1,11 +1,46 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from 'expo-router';
+<<<<<<< Updated upstream:app/(tabs)/home.tsx
+=======
+import { useEffect, useState } from 'react';
+import { getPets } from '../../lib/api/pets';
+const URL = 'http://localhost:3333/download/';
+
+// Tipagem do Pet
+type Pet = {
+  _id: string;
+  nome: string;
+  especie: string;
+  idade: number;
+  porte: string;
+  cidade: string;
+  estado: string;
+  imagens?: string[];
+  foto_url: string;
+};
+>>>>>>> Stashed changes:src/(tabs)/home.tsx
 
 export default function Home() {
   const router = useRouter();
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-black p-4">
+      {/* Cabeçalho com nome e botão */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000' /* ou dark mode ajuste */ }}>Rod</Text>
+        <TouchableOpacity
+          onPress={() => router.push('/recommendation')}
+          style={{
+            backgroundColor: '#22c55e',
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Recomendações</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Categorias */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">
         {["Pequenos", "Cães", "Gatos", "Grandes", "Macho", "Fêmea"].map((categoria, index) => (
@@ -20,6 +55,7 @@ export default function Home() {
 
       {/* Cards dos pets */}
       <View className="space-y-4">
+<<<<<<< Updated upstream:app/(tabs)/home.tsx
         <TouchableOpacity onPress={() => router.push('/pet-details/rex')}>
           <PetCard
             nome="Rex"
@@ -51,6 +87,29 @@ export default function Home() {
             tags={["Gata", "2 meses", "Carinhoso", "Pequeno"]}
           />
         </TouchableOpacity>
+=======
+        {pets.map((pet) => {
+          const imageUrl = pet.foto_url
+            ? `${URL}${pet.foto_url}`
+            : 'https://via.placeholder.com/150';
+
+          return (
+            <TouchableOpacity key={pet._id} onPress={() => router.push(`/pet-details/${pet._id}`)}>
+              <PetCard
+                nome={pet.nome}
+                imagem={imageUrl}
+                tags={[
+                  pet.especie,
+                  `${pet.idade} anos`,
+                  pet.porte,
+                  pet.cidade,
+                  pet.estado
+                ]}
+              />
+            </TouchableOpacity>
+          );
+        })}
+>>>>>>> Stashed changes:src/(tabs)/home.tsx
       </View>
     </ScrollView>
   );
