@@ -1,18 +1,14 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Switch,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 
-// importe o Dropdown
-import { Dropdown } from "../../components/Dropdown"; // ajuste o caminho conforme a sua estrutura
+import { Dropdown } from "../../components/Dropdown";
+import { FormInput } from "../../components/FormInput";
+import { FormSwitch } from "../../components/FormSwitch";
+import { Button } from "../../components/Button";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { colors } from "../../styles/colors";
 
 export default function PetRegisterScreen() {
   const [nome, setNome] = useState("");
@@ -60,125 +56,100 @@ export default function PetRegisterScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white px-4 py-6">
-      <TouchableOpacity
-        onPress={selecionarImagem}
-        className="items-center mb-4"
-      >
-        {imagem ? (
-          <Image source={{ uri: imagem }} className="w-full h-64 rounded-xl" />
-        ) : (
-          <View className="w-full h-64 bg-black/5 border border-dashed border-black/20 px-4 py-2 rounded-xl justify-center items-center">
-            <Ionicons name="images" size={64} color="gray" />
-            <Text className="text-black/50 mt-2">+ Selecionar imagem</Text>
-          </View>
-        )}
-      </TouchableOpacity>
+    <SafeAreaView className="flex-1 bg-white px-4" edges={[]}>
+      <ScrollView className="my-4" showsVerticalScrollIndicator={false}>
+        <TouchableOpacity
+          onPress={selecionarImagem}
+          className="items-center mb-4"
+        >
+          {imagem ? (
+            <Image
+              source={{ uri: imagem }}
+              className="w-full h-64 rounded-xl border-2 border-gray-200"
+            />
+          ) : (
+            <View className="w-full h-64 bg-gray-50 border-2 border-gray-200 rounded-xl justify-center items-center">
+              <Ionicons name="images" size={48} color={colors.gray[400]} />
+              <Text className="text-white bg-gray-400 mt-2 font-medium px-4 py-2 rounded-xl">
+                + Selecionar imagem
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
 
-      <View className="gap-4">
-        <View>
-          <Text className="text-black font-medium mb-1">Nome</Text>
-          <TextInput
-            className="w-full border border-black/5 bg-black/5 rounded-xl px-4 py-4 placeholder:text-black/50"
+        <View className="gap-4">
+          <FormInput
+            label="Nome"
             placeholder="Ex: Thor"
             value={nome}
             onChangeText={setNome}
           />
-        </View>
 
-        {/* Usando Dropdown */}
-        <Dropdown
-          title="Tipo"
-          options={["Cachorro", "Gato", "Outro"]}
-          selectedValue={tipo}
-          onValueChange={setTipo}
-        />
+          <Dropdown
+            title="Tipo"
+            options={["Cachorro", "Gato", "Outro"]}
+            selectedValue={tipo}
+            onValueChange={setTipo}
+          />
 
-        <View>
-          <Text className="text-black font-medium mb-1">Idade</Text>
-          <TextInput
-            className="w-full border border-black/5 bg-black/5 rounded-xl px-4 py-4 placeholder:text-black/50"
+          <FormInput
+            label="Idade"
             placeholder="Ex: 2 anos"
             value={idade}
             onChangeText={setIdade}
           />
-        </View>
 
-        <Dropdown
-          title="Porte"
-          options={["Pequeno", "Médio", "Grande"]}
-          selectedValue={porte}
-          onValueChange={setPorte}
-        />
+          <Dropdown
+            title="Porte"
+            options={["Pequeno", "Médio", "Grande"]}
+            selectedValue={porte}
+            onValueChange={setPorte}
+          />
 
-        <Dropdown
-          title="Sexo"
-          options={["Macho", "Fêmea"]}
-          selectedValue={sexo}
-          onValueChange={setSexo}
-        />
+          <Dropdown
+            title="Sexo"
+            options={["Macho", "Fêmea"]}
+            selectedValue={sexo}
+            onValueChange={setSexo}
+          />
 
-        <View>
-          <Text className="text-black font-medium mb-1">Cor</Text>
-          <TextInput
-            className="w-full border border-black/5 bg-black/5 rounded-xl px-4 py-4 placeholder:text-black/50"
+          <FormInput
+            label="Cor"
             placeholder="Ex: Branco com preto"
             value={cor}
             onChangeText={setCor}
           />
-        </View>
 
-        <View>
-          <Text className="text-black font-medium mb-1">Raça</Text>
-          <TextInput
-            className="w-full border border-black/5 bg-black/5 rounded-xl px-4 py-4 placeholder:text-black/50"
+          <FormInput
+            label="Raça"
             placeholder="Ex: Poodle"
             value={raca}
             onChangeText={setRaca}
           />
-        </View>
 
-        <View>
-          <Text className="text-black font-medium mb-1">Descrição</Text>
-          <TextInput
-            multiline
-            numberOfLines={4}
-            className="w-full border border-black/5 bg-black/5 rounded-xl px-4 py-4 placeholder:text-black/50"
+          <FormInput
+            label="Descrição"
             placeholder="Ex: Muito brincalhão, adora correr..."
             value={descricao}
             onChangeText={setDescricao}
+            multiline
           />
-        </View>
 
-        <View className="flex-row items-center justify-between w-full mt-2">
-          <Text className="text-black font-bold text-base">Vacinado</Text>
-          <Switch
+          <FormSwitch
+            label="Vacinado"
             value={vacinado}
             onValueChange={setVacinado}
-            thumbColor="#ffffff"
-            trackColor={{ true: "#22c55e" }}
           />
-        </View>
 
-        <View className="flex-row items-center justify-between w-full mb-6">
-          <Text className="text-black font-bold text-base">Castrado</Text>
-          <Switch
+          <FormSwitch
+            label="Castrado"
             value={castrado}
             onValueChange={setCastrado}
-            thumbColor="#ffffff"
-            trackColor={{ true: "#22c55e" }}
           />
-        </View>
 
-        <TouchableOpacity
-          className="bg-green rounded-xl px-4 py-4 w-full mb-8"
-          onPress={handleCadastrar}
-        >
-          <Text className="text-white text-center font-bold text-xl">
-            Cadastrar Pet
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <Button text="Cadastrar Pet" onPress={handleCadastrar} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

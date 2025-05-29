@@ -11,13 +11,13 @@ import { Link, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../styles/colors";
 import { mockPets } from "../../mock/pets";
-import { useState } from "react";
+import { Title } from "../../../components/Title";
+import { Button } from "../../../components/Button";
 
 export default function PetDetailsScreen() {
   const params = useLocalSearchParams<{ id: string }>();
 
   const pet = mockPets.find((p) => p.id === Number(params.id));
-  const [favorito, setFavorito] = useState(false);
 
   if (!pet) {
     return (
@@ -40,27 +40,15 @@ export default function PetDetailsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white px-4 py-4">
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <SafeAreaView className="flex-1 bg-white px-4" edges={[]}>
+      <ScrollView className="my-4" showsVerticalScrollIndicator={false}>
         <Image
           source={pet.imagem}
           className="w-full h-64 rounded-xl mt-4 mb-6"
           resizeMode="cover"
         />
 
-        <View className="flex-row justify-between items-center mb-2">
-          <Text className="text-3xl font-bold text-black">{pet.nome}</Text>
-
-          <TouchableOpacity onPress={() => setFavorito((f) => !f)}>
-            <Ionicons
-              name={favorito ? "heart" : "heart-outline"}
-              size={30}
-              color={colors.green}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <Text className="text-gray-600 mb-1">{pet.ong}</Text>
+        <Title greeting={pet.nome} subtitle={pet.ong} />
 
         <View className="flex-row justify-center mb-6">
           <View className="flex-1 items-center">
@@ -99,7 +87,6 @@ export default function PetDetailsScreen() {
           </View>
         </View>
 
-        {/* Extras */}
         <View className="mb-6 flex-row gap-8 justify-center">
           <View className="items-center">
             <Ionicons name="medkit" size={28} color={colors.green} />
@@ -113,14 +100,7 @@ export default function PetDetailsScreen() {
           </View>
         </View>
 
-        <TouchableOpacity
-          onPress={handleContato}
-          className="bg-green px-6 py-4 rounded-xl items-center"
-        >
-          <Text className="text-white font-bold text-lg">
-            Entrar em contato
-          </Text>
-        </TouchableOpacity>
+        <Button text="Entrar em contato" onPress={handleContato} />
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,73 +1,52 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import { Stack, useRouter, usePathname } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import { colors } from "../../styles/colors";
 
-export default function RootLayout() {
-  const router = useRouter();
-  const path = usePathname();
-
-  const tabs = [
-    { name: "Favoritos", route: "/favorites" },
-    { name: "Home", route: "/home" },
-    { name: "Perfil", route: "/profile" },
-  ];
-
+export default function TabLayout() {
   return (
-    <View className="flex-1 bg-white">
-      <View className="flex-1">
-        <Stack>
-          <Stack.Screen
-            name="home"
-            options={{
-              headerTitle: () => (
-                <View className="flex-1 items-center justify-center">
-                  <Image
-                    source={require("../../../assets/logo.png")}
-                    style={{ width: 160, height: 40, resizeMode: "contain" }}
-                  />
-                </View>
-              ),
-              headerBackVisible: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="profile"
-            options={{
-              title: "Perfil",
-            }}
-          />
-
-          <Stack.Screen
-            name="pet-details/[id]"
-            options={{
-              title: "Pets",
-            }}
-          />
-        </Stack>
-      </View>
-
-      <View className="flex-row justify-around bg-white py-3 border-t border-gray-200">
-        {tabs.map((tab) => {
-          const isActive = path === tab.route;
-          return (
-            <TouchableOpacity
-              key={tab.route}
-              onPress={() => router.push(tab.route)}
-              className={`px-5 py-2 border-b-2 ${
-                isActive ? "border-green-500" : "border-transparent"
-              }`}
-            >
-              <Text
-                className={`text-base font-medium ${
-                  isActive ? "text-green-500" : "text-black"
-                }`}
-              >
-                {tab.name}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </View>
+    <Tabs screenOptions={{ tabBarActiveTintColor: colors.green }}>
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: "Início",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={28} name="home" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: "Adote.me",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={28} name="paw" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Perfil",
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={28} name="person" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="found"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="pet-details/[id]"
+        options={{
+          title: "Detalhes do Pet",
+          href: null,
+        }}
+      />
+    </Tabs>
   );
 }

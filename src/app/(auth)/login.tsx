@@ -24,9 +24,9 @@ export default function LoginScreen() {
     console.log("Sou ONG:", isOng);
 
     if (isOng) {
-      router.replace("/(ong-tabs)/home");
+      router.replace("/(ong)/home");
     } else {
-      router.replace("/(adotante-tabs)/home");
+      router.replace("/(adotante)/home");
     }
   };
 
