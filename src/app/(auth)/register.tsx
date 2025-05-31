@@ -1,9 +1,14 @@
-import { ScrollView, View, Text, Switch, TextInput, TouchableOpacity, Image } from "react-native";
+import { ScrollView, View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { Link, router } from "expo-router";
+import { FormInput } from "../../components/FormInput"; // Ajuste o caminho conforme necessário
+import { Button } from "../../components/Button";
+import { Divisor } from "../../components/Divisor";
+import { SocialButton } from "../../components/SocialButton";
+import { FormSwitch } from "../../components/FormSwitch"; // Adicionando o FormSwitch
 
-export default function CadastroScreen() {
+export default function RegisterScreen() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [cpfOuCnpj, setCpfOuCnpj] = useState("");
@@ -13,10 +18,16 @@ export default function CadastroScreen() {
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [isOng, setIsOng] = useState(false);
 
-  const toggleSwitch = () => setIsOng(previous => !previous);
-
   const handleRegister = () => {
-    if (!nome || !email || !cpfOuCnpj || !telefone || !endereco || !senha || !confirmarSenha) {
+    if (
+      !nome ||
+      !email ||
+      !cpfOuCnpj ||
+      !telefone ||
+      !endereco ||
+      !senha ||
+      !confirmarSenha
+    ) {
       alert("Preencha todos os campos.");
       return;
     }
@@ -32,108 +43,94 @@ export default function CadastroScreen() {
   return (
     <SafeAreaView className="flex-1 bg-white px-6 py-6">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="items-center gap-6">
+        <View className="items-center">
           <Image
             source={require("../../../assets/logo.png")}
             className="w-64"
             resizeMode="contain"
           />
 
-          <View className="items-center">
-            <Text className="text-3xl font-bold text-black">Crie sua conta</Text>
-            <Text className="text-xl text-gray-500">Preencha os dados abaixo</Text>
+          <View className="items-center mb-4">
+            <Text className="text-3xl font-bold text-black">
+              Crie sua conta
+            </Text>
+            <Text className="text-xl text-gray-500">
+              Preencha os dados abaixo
+            </Text>
           </View>
 
-          <View className="flex-row items-center justify-between w-full">
-            <Text className="text-black font-bold text-xl">Sou ONG</Text>
-            <Switch
-              value={isOng}
-              onValueChange={toggleSwitch}
-              thumbColor="#ffffff"
-              trackColor={{ true: "#22c55e" }} // green-500
-            />
-          </View>
+          <FormSwitch
+            label="Sou ONG"
+            value={isOng}
+            onValueChange={(newValue) => setIsOng(newValue)}
+          />
 
-          <View className="w-full gap-4">
-            <TextInput
-              className="border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 placeholder:text-gray-400"
-              placeholder={isOng ? "Nome da ONG" : "Nome completo"}
+          <View className="w-full">
+            <FormInput
+              label={isOng ? "Nome da ONG" : "Nome completo"}
               value={nome}
               onChangeText={setNome}
+              placeholder={
+                isOng ? "Digite o nome da ONG" : "Digite seu nome completo"
+              }
             />
 
-            <TextInput
-              className="border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 placeholder:text-gray-400"
-              placeholder={isOng ? "E-mail da instituição" : "E-mail"}
+            <FormInput
+              label={isOng ? "E-mail da instituição" : "E-mail"}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
+              placeholder={
+                isOng ? "Digite o e-mail da instituição" : "Digite seu e-mail"
+              }
             />
 
-            <TextInput
-              className="border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 placeholder:text-gray-400"
-              placeholder={isOng ? "CNPJ" : "CPF"}
+            <FormInput
+              label={isOng ? "CNPJ" : "CPF"}
               value={cpfOuCnpj}
               onChangeText={setCpfOuCnpj}
               keyboardType="numeric"
+              placeholder={isOng ? "Digite o CNPJ" : "Digite o CPF"}
             />
 
-            <TextInput
-              className="border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 placeholder:text-gray-400"
-              placeholder="Telefone"
+            <FormInput
+              label="Telefone"
               value={telefone}
               onChangeText={setTelefone}
               keyboardType="phone-pad"
+              placeholder="Digite seu telefone"
             />
 
-            <TextInput
-              className="border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 placeholder:text-gray-400"
-              placeholder="Endereço"
+            <FormInput
+              label="Endereço"
               value={endereco}
               onChangeText={setEndereco}
+              placeholder="Digite seu endereço"
             />
 
-            <TextInput
-              className="border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 placeholder:text-gray-400"
-              placeholder="Senha"
+            <FormInput
+              label="Senha"
               value={senha}
               onChangeText={setSenha}
               secureTextEntry
+              placeholder="Crie uma senha"
             />
 
-            <TextInput
-              className="border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 placeholder:text-gray-400"
-              placeholder="Confirmar senha"
+            <FormInput
+              label="Confirmar senha"
               value={confirmarSenha}
               onChangeText={setConfirmarSenha}
               secureTextEntry
+              placeholder="Confirme sua senha"
             />
           </View>
 
-          <TouchableOpacity
-            className="w-full bg-green rounded-xl px-4 py-4"
-            onPress={handleRegister}
-          >
-            <Text className="text-white text-center font-bold text-xl">
-              Cadastrar
-            </Text>
-          </TouchableOpacity>
+          <Button text="Cadastrar" onPress={handleRegister} />
 
-          <View className="flex-row items-center w-full gap-4">
-            <View className="flex-1 h-px bg-gray-200" />
-            <Text className="text-gray-500 font-medium">ou</Text>
-            <View className="flex-1 h-px bg-gray-200" />
-          </View>
+          <Divisor />
 
-          <TouchableOpacity className="w-full border-2 border-gray-200 bg-gray-50 rounded-xl px-4 py-4 flex-row items-center justify-center gap-4">
-            <Image
-              source={require("../../../assets/govbr-logo.png")}
-              className="w-16 h-6"
-              resizeMode="contain"
-            />
-            <Text className="text-black font-bold">Entrar com gov.br</Text>
-          </TouchableOpacity>
+          <SocialButton />
 
           <View className="flex-row">
             <Text className="text-black">Já tem uma conta? </Text>
