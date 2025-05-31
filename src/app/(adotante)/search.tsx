@@ -14,7 +14,7 @@ export default function Search() {
         <Text className="text-white font-bold text-4xl text-center mb-16">
           Queremos saber quais pets mais tocam o seu coração!
         </Text>
-        <Button text="Começar" href="/search" variant="secondary" />
+        <Button text="Começar" href="/recomendation" variant="secondary" />
       </View>
     </SafeAreaView>
   );
