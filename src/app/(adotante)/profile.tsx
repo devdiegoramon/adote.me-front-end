@@ -6,7 +6,7 @@ export default function ProfileScreen() {
   const user = mockAdotante;
 
   return (
-    <SafeAreaView className="flex-1 bg-white px-4 pt-4 gap-6" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-white px-4 gap-6" edges={["top"]}>
       <InfoCard label="Nome" value={user.nome} />
 
       <InfoCard label="E-mail" value={user.email} />

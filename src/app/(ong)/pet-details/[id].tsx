@@ -1,17 +1,10 @@
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, Image, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../styles/colors";
 import { mockPets } from "../../mock/pets";
-import { Title } from "../../../components/Title";
+import { Title } from "../../../components/Title"; // Importando o Title
 import { Button } from "../../../components/Button";
 
 export default function PetDetailsScreen() {
