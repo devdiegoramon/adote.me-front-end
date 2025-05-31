@@ -10,6 +10,24 @@ export const mockPets = [
     imagem: {
       uri: "https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?q=80&w=1972",
     },
+    solicitacoes: [
+      {
+        id: 1,
+        interessado: "João Silva",
+        data: "15/05/2025",
+        status: "Pendente",
+        contato: "joao.silva@email.com",
+        telefone: "(81) 98765-4321",
+      },
+      {
+        id: 2,
+        interessado: "Maria Oliveira",
+        data: "18/05/2025",
+        status: "Aprovado",
+        contato: "maria.oliveira@email.com",
+        telefone: "(81) 91234-5678",
+      },
+    ],
   },
   {
     id: 2,
@@ -22,6 +40,16 @@ export const mockPets = [
     imagem: {
       uri: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=2030",
     },
+    solicitacoes: [
+      {
+        id: 1,
+        interessado: "Carlos Santos",
+        data: "10/05/2025",
+        status: "Pendente",
+        contato: "carlos.santos@email.com",
+        telefone: "(81) 99876-5432",
+      },
+    ],
   },
   {
     id: 3,
@@ -34,6 +62,7 @@ export const mockPets = [
     imagem: {
       uri: "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?q=80&w=2000",
     },
+    solicitacoes: [],
   },
   {
     id: 4,
@@ -46,5 +75,23 @@ export const mockPets = [
     imagem: {
       uri: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=2000",
     },
+    solicitacoes: [
+      {
+        id: 1,
+        interessado: "Ana Paula",
+        data: "20/05/2025",
+        status: "Recusado",
+        contato: "ana.paula@email.com",
+        telefone: "(81) 98543-2109",
+      },
+      {
+        id: 2,
+        interessado: "Pedro Henrique",
+        data: "22/05/2025",
+        status: "Pendente",
+        contato: "pedro.h@email.com",
+        telefone: "(81) 97654-3210",
+      },
+    ],
   },
 ];
