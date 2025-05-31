@@ -47,6 +47,14 @@ export default function TabLayout() {
           href: null,
         }}
       />
+      <Tabs.Screen
+        name="recomendation"
+        options={{
+          title: "Recomendações",
+          headerShown: false,
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
