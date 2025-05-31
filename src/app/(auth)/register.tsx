@@ -1,4 +1,5 @@
-import { SafeAreaView, ScrollView, View, Text, Switch, TextInput, TouchableOpacity, Image } from "react-native";
+import { ScrollView, View, Text, Switch, TextInput, TouchableOpacity, Image } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { Link, router } from "expo-router";
 
