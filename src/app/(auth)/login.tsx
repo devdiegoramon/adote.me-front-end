@@ -34,7 +34,7 @@ export default function LoginScreen() {
 
     } catch (error: any) {
       console.error("Erro no login:", error);
-      Alert.alert("Erro", error.message || "Falha ao fazer login.");
+      return Alert.alert("Erro", error.message || "Falha ao fazer login.");
     }
 
     const userData = await AsyncStorage.getItem("user");
