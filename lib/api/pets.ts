@@ -2,9 +2,9 @@
 import { apiFetch } from './index';
 
 export async function getPets() {
-  return apiFetch("/pets"); // Faz GET /pets
+  return apiFetch("/api/pets"); // Faz GET /pets
 }
 
 export async function getPetById(id: string) {
-  return apiFetch(`/pets/${id}`); // Faz GET /pets/:id
+  return apiFetch(`/api/pets/${id}`); // Faz GET /pets/:id
 }

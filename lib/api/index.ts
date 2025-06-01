@@ -1,8 +1,12 @@
 // lib/api/index.ts
+import { Platform } from 'react-native';
+const localIP = "192.168.56.1"; // <- Substitua pelo IP do seu PC na rede local
 
-const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_URL || "http://192.168.0.104:3000/api";
-
+export const API_BASE_URL =
+  Platform.OS === 'web'
+    ? 'http://localhost:3000'
+    : `http://${localIP}:3000`;
+    
 export async function apiFetch(path: string, options: RequestInit = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
