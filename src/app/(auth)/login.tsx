@@ -30,7 +30,7 @@ export default function LoginScreen() {
       await AsyncStorage.setItem("token", response.token);
     } catch (error: any) {
       console.error("Erro no login:", error);
-      Alert.alert("Erro", error.message || "Falha ao fazer login.");
+      return Alert.alert("Erro", error.message || "Falha ao fazer login.");
     }
 
     // Redireciona para a tela inicial após o "login"
