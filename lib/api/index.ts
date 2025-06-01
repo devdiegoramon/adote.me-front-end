@@ -1,6 +1,6 @@
 // lib/api/index.ts
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000/api";
+export const API_BASE_URL = "http://localhost:3000/";
 
 export async function apiFetch(path: string, options: RequestInit = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {

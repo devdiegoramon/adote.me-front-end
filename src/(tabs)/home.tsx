@@ -2,7 +2,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { getPets } from '../../lib/api/pets';
-const URL = 'http://localhost:3000/download/';
+import { API_BASE_URL } from '../../lib/api'; // ajuste o caminho conforme seu projeto
 
 
 // Tipagem do Pet
@@ -53,8 +53,9 @@ export default function Home() {
       <View className="space-y-4">
         {pets.map((pet) => {
   const imageUrl = pet.foto_url
-    ? `${URL}${pet.foto_url}`
-    : 'https://via.placeholder.com/150';
+  ? `${API_BASE_URL}download${pet.foto_url}`
+  : 'https://via.placeholder.com/150';
+
 
   return (
     <TouchableOpacity key={pet._id} onPress={() => router.push(`/pet-details/${pet._id}`)}>

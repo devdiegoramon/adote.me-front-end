@@ -1,9 +1,9 @@
 import { View, Text, Image, Button, ScrollView } from "react-native";
 import {  useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { getPetById } from '../../lib/api/pets'; // Supondo que você tenha essa função
+import { getPetById } from '../lib/api/pets'; // Supondo que você tenha essa função
+import { API_BASE_URL } from '../lib/api';
 
-const URL = 'http://localhost:3000/download/';
 
 // Tipagem do Pet
 type Pet = {
@@ -53,8 +53,8 @@ export default function PetDetails() {
     <ScrollView style={{ flex: 1, padding: 16 }}>
       <Image
         source={{ uri: pet.foto_url
-    ? `${URL}${pet.foto_url}`
-    : 'https://via.placeholder.com/150'}}
+    ? `${API_BASE_URL}download${pet.foto_url}`
+      : 'https://via.placeholder.com/150'}}
         style={{ width: "100%", height: 300 }}
         resizeMode="cover"
       />
