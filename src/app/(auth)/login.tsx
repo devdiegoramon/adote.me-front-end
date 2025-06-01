@@ -1,20 +1,14 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Switch,
-  ScrollView,
-} from "react-native";
+import { View, Text, Image, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { Link, router } from "expo-router";
-import { colors } from "../../styles/colors";
 import { Divisor } from "../../components/Divisor";
 import { SocialButton } from "../../components/SocialButton";
-import { FormInput } from "../../components/FormInput"; // Ajuste o caminho conforme necessário
+import { FormInput } from "../../components/FormInput";
 import { Button } from "../../components/Button";
 import { FormSwitch } from "../../components/FormSwitch";
+import { login } from "../../../lib/api/login";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -23,11 +17,23 @@ export default function LoginScreen() {
 
   const toggleSwitch = () => setIsOng((previous) => !previous);
 
-  const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Senha:", senha);
-    console.log("Sou ONG:", isOng);
+  const handleLogin = async () => {
+    // Validação básica - verifica se os campos estão preenchidos
+    if (!email || !senha) {
+      Alert.alert("Erro", "Preencha todos os campos.");
+      return;
+    }
 
+    try {
+      const response = await login({ email, senha });
+      console.log("Login bem-sucedido:", response);
+      await AsyncStorage.setItem("token", response.token);
+    } catch (error: any) {
+      console.error("Erro no login:", error);
+      Alert.alert("Erro", error.message || "Falha ao fazer login.");
+    }
+
+    // Redireciona para a tela inicial após o "login"
     if (isOng) {
       router.replace("/(ong)/home");
     } else {
