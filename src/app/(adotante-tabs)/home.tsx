@@ -100,7 +100,7 @@ export default function HomeAdotanteScreen() {
           <Link href={`pet-details/${pet._id}`} asChild>
             <TouchableOpacity className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row gap-4">
               <Image
-                source={{ uri: `${API_BASE_URL}download${pet.foto_url}` }}
+                source={{ uri: `${API_BASE_URL}/download/${pet.foto_url}` }}
                 className="w-36 h-36 rounded-xl"
                 resizeMode="cover"
               />

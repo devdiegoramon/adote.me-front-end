@@ -38,7 +38,7 @@ type OngPayload = CommonPayload & {
 export type SignupPayload = AdotantePayload | OngPayload;
 
 export async function signup(payload: SignupPayload) {
-  return apiFetch('/auth/register', {
+  return apiFetch('/api/auth/register', {
     method: 'POST',
     body: JSON.stringify(payload),
   });

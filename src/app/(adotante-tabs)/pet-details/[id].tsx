@@ -112,7 +112,7 @@ export default function PetDetailsScreen() {
     <SafeAreaView className="flex-1 bg-white px-4 py-4">
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image
-          source={{ uri: `${API_BASE_URL}download${pet.foto_url}` }}
+          source={{ uri: `${API_BASE_URL}/download/${pet.foto_url}` }}
           className="w-full h-64 rounded-xl mt-4 mb-6"
           resizeMode="cover"
         />

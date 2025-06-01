@@ -7,7 +7,7 @@ type LoginPayload = {
 };
 
 export async function login(payload: LoginPayload) {
-  return apiFetch('/auth/login', {
+  return apiFetch('/api/auth/login', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
