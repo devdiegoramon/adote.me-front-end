@@ -19,7 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 // URL base para imagens
-const URL = "http://localhost:3333/download/";
+const URL = "http://192.168.0.104:3333/download/";
 
 // Tipagem do Pet recomendação
 type Pet = {
@@ -175,7 +175,7 @@ export default function RecommendationScreen() {
 
     try {
       const response = await fetch(
-        "http://localhost:3333/api/recomendation/gerar-recomendacoes",
+        "http://192.168.0.104:3333/api/recomendation/gerar-recomendacoes",
         {
           method: "POST",
           headers: {

@@ -136,7 +136,7 @@ export default function RegisterScreen() {
       console.log("Payload final:", payload);
       await signup(payload);
       Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
-      router.replace("/(tabs)/home");
+      router.replace(userType === "ong" ? "/(ong)/home" : "/(adotante)/home");
     } catch (error: any) {
       Alert.alert("Erro", error.message || "Erro ao realizar cadastro.");
     }
