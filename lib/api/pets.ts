@@ -1,5 +1,7 @@
 // lib/api/pets.ts
 import { apiFetch } from './index';
+import { makeApiCall } from "./index";
+import authorization from "./interceptors/authorization";
 import { API_BASE_URL } from './index';
 import { dataURLtoBlob } from '../../src/utils/dataURLtoBlob';
 
@@ -93,3 +95,12 @@ export async function uploadImagemPet(petId: number, imagemUri: string) {
     },
   });
 }
+
+// export async function getPets() {
+//   return makeApiCall({
+//     endpoint: "/pets",
+//     interceptors: [authorization],
+//     options: {
+//       method: "GET",
+//     },
+//   });
