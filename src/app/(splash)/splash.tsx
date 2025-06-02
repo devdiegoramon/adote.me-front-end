@@ -25,7 +25,7 @@ export default function App() {
     async function prepare() {
       try {
         const token = await AsyncStorage.getItem("token");
-        const role = await AsyncStorage.getItem("role");
+        const role = await AsyncStorage.getItem("user_role");
         setHasUser(!!token);
         setIsUserOng(role === "ONG");
         await new Promise(resolve => setTimeout(resolve, 1000));
