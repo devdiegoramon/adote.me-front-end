@@ -13,9 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [isOng, setIsOng] = useState(false);
 
-  const toggleSwitch = () => setIsOng((previous) => !previous);
 
   const handleLogin = async () => {
     // Validação básica - verifica se os campos estão preenchidos
@@ -39,13 +37,21 @@ export default function LoginScreen() {
       Alert.alert("Erro", error.message || "Falha ao fazer login.");
     }
 
-    // Redireciona para a tela inicial após o "login"
-    if (isOng) {
-      router.replace("/(ong)/home");
-    } else {
-      router.replace("/(adotante)/home");
-    }
-  };
+    const userData = await AsyncStorage.getItem("user");
+
+      if (!userData) {
+        console.error("Usuário não encontrado no AsyncStorage");
+        return;
+      }
+
+      const user = JSON.parse(userData);
+
+      if (user.tipo === 'ONG') {
+        router.replace("/(ong)/home");
+      } else {
+        router.replace("/(adotante)/home");
+      }
+    };
 
   return (
     <SafeAreaView className="flex-1 p-6">
@@ -64,12 +70,7 @@ export default function LoginScreen() {
           </Text>
           <Text className="text-xl text-gray-500">Faça login na sua conta</Text>
         </View>
-
-        <FormSwitch
-          label="Sou ONG"
-          value={isOng}
-          onValueChange={(newValue) => setIsOng(newValue)}
-        />
+  
 
         <FormInput
           label="E-mail"
