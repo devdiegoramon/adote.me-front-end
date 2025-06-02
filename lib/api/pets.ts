@@ -54,22 +54,17 @@ export async function petRegister(payload: PetRegisterPayload) {
 export async function uploadImagemPet(petId: number, imagemUri: string) {
   const formData = new FormData();
   const filename = imagemUri.split("/").pop()!;
-  const ext = filename.split(".").pop();
-  const type = `image/${ext}`;
-  const blob=dataURLtoBlob(imagemUri)
+  const blob = dataURLtoBlob(imagemUri);
 
-  formData.append("image", {
-    uri: blob,
-    name: filename,
-    type,
-  } as unknown as Blob);
-  console.log(blob)
+  // ✅ Forma correta de anexar ao FormData
+  formData.append("image", blob, filename);
+  
+  console.log('Blob criado:', blob);
+  console.log('Filename:', filename);
 
   return fetch(`${API_BASE_URL}/api/pets/image/${petId}`, {
     method: "POST",
     body: formData,
-    // ⚠️ Não coloque Content-Type aqui — o fetch cuida disso quando usar FormData
+    // ✅ Correto - não definir Content-Type para FormData
   });
 }
-
-
