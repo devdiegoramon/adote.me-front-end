@@ -27,7 +27,13 @@ export default function LoginScreen() {
     try {
       const response = await login({ email, senha });
       console.log("Login bem-sucedido:", response);
+
+      // Armazena o token
       await AsyncStorage.setItem("token", response.token);
+
+      // Armazena o user como string JSON
+      await AsyncStorage.setItem("user", JSON.stringify(response.user));
+
     } catch (error: any) {
       console.error("Erro no login:", error);
       Alert.alert("Erro", error.message || "Falha ao fazer login.");

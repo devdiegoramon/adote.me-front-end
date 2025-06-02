@@ -12,6 +12,7 @@ import { colors } from "../../styles/colors";
 import { PetRegisterPayload } from "../../../lib/api/pets";
 import { petRegister } from "../../../lib/api/pets";
 import { uploadImagemPet } from "../../../lib/api/pets";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function PetRegisterScreen() {
   const [nome, setNome] = useState("");
@@ -39,7 +40,11 @@ export default function PetRegisterScreen() {
     }
   };
 
+
   const handleCadastrar = async () => {
+    const userJson = await AsyncStorage.getItem("user");
+    const user = userJson ? JSON.parse(userJson) : null;
+    
   const payload: PetRegisterPayload = {
   nome,
   especie: tipo.toUpperCase() as PetRegisterPayload["especie"],
@@ -47,7 +52,7 @@ export default function PetRegisterScreen() {
   porte: porte.toUpperCase() as PetRegisterPayload["porte"],
   peso: 10, // precisa virar input depois
   descricao,
-  ong_id: 1, // substituir pelo id da ONG autenticada
+  ong_id: user.user_id, // substituir pelo id da ONG autenticada
   foto_url: "",
   vacinado,
   castrado,
