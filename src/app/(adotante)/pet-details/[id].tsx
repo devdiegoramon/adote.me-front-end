@@ -16,9 +16,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
 import { getPetById } from "../../../../lib/api/pets";
 import { Button } from "../../../components/Button"; // Importando o componente Button
+import { API_BASE_URL } from '../../../../lib/api';
 
 const { width, height } = Dimensions.get("window");
-const BASE_URL = "http://192.168.0.104:3000/download/";
 
 // Collection de personalidades integrada (mantendo a mesma)
 const PERSONALIDADES_DATA = [
@@ -471,6 +471,10 @@ export default function PetDetails() {
     );
   }
 
+  const imageUrl = pet.foto_url
+                  ? `${API_BASE_URL}/download/${pet.foto_url}`
+                  : 'https://via.placeholder.com/150';
+
   return (
     <View className="flex-1 bg-white">
       <SafeAreaView className="flex-1" edges={[]}>
@@ -479,9 +483,7 @@ export default function PetDetails() {
           <View className="relative">
             <Image
               source={{
-                uri: pet.foto_url
-                  ? `${BASE_URL}${pet.foto_url}`
-                  : "https://via.placeholder.com/600x400/cccccc/666666?text=Sem+Foto",
+                uri: imageUrl
               }}
               style={{ width, height: 300 }}
               resizeMode="cover"

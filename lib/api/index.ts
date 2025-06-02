@@ -1,6 +1,6 @@
 // lib/api/index.ts
 import { Platform } from 'react-native';
-const localIP = "192.168.56.1"; // <- Substitua pelo IP do seu PC na rede local
+const localIP = "192.168.1.8"; // <- Substitua pelo IP do seu PC na rede local
 
 export const API_BASE_URL =
   Platform.OS === 'web'

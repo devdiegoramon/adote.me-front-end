@@ -7,8 +7,7 @@ import { Title } from "../../../components/Title";
 import { Button } from "../../../components/Button";
 import { getPetById } from "../../../../lib/api/pets";
 import { useEffect, useState } from "react";
-
-const URL = "http://localhost:3000/download/";
+import { API_BASE_URL } from '../../../../lib/api';
 
 type Pet = {
   _id: string;
@@ -62,8 +61,8 @@ export default function PetDetailsScreen() {
         <Image
           source={{
             uri: pet.foto_url
-              ? `${URL}${pet.foto_url}`
-              : "https://via.placeholder.com/150",
+                  ? `${API_BASE_URL}/download/${pet.foto_url}`
+                  : 'https://via.placeholder.com/150',
           }}
           className="w-full h-64 rounded-xl mt-4 mb-6"
           resizeMode="cover"

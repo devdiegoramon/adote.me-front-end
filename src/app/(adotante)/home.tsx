@@ -6,8 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Title } from "../../components/Title";
 import { SearchInput } from "../../components/SearchInput";
 import { getPets } from "../../../lib/api/pets";
-
-const URL = "http://192.168.0.104:3000/download/";
+import { API_BASE_URL } from '../../../lib/api';
 
 // Tipagem do Pet
 type Pet = {
@@ -320,8 +319,8 @@ export default function HomeAdotanteScreen() {
             <View className="space-y-4">
               {filteredPets.map((pet) => {
                 const imageUrl = pet.foto_url
-                  ? `${URL}${pet.foto_url}`
-                  : "https://via.placeholder.com/150";
+                  ? `${API_BASE_URL}/download/${pet.foto_url}`
+                  : 'https://via.placeholder.com/150';
 
                 return (
                   <TouchableOpacity

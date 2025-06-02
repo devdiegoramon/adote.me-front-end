@@ -14,12 +14,10 @@ import { useRouter } from "expo-router";
 import { useEffect, useState, useRef } from "react";
 import * as Location from "expo-location";
 import { LinearGradient } from "expo-linear-gradient";
+import { API_BASE_URL } from '../../../lib/api';
 
 // Obter dimensões da tela
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-
-// URL base para imagens
-const URL = "http://192.168.0.104:3333/download/";
 
 // Tipagem do Pet recomendação
 type Pet = {
@@ -35,6 +33,7 @@ type Pet = {
   imagens: string[];
   probabilidade: number;
   descricao: string;
+  foto_url: string;
 };
 
 // Tipagem das preferências
@@ -174,8 +173,7 @@ export default function RecommendationScreen() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "http://192.168.0.104:3333/api/recomendation/gerar-recomendacoes",
+      const response = await fetch(`${API_BASE_URL}/api/recomendation/gerar-recomendacoes`,
         {
           method: "POST",
           headers: {
@@ -772,10 +770,9 @@ export default function RecommendationScreen() {
                 else if (pet.porte_pet_medio) porte = "Médio";
                 else if (pet.porte_pet_pequeno) porte = "Pequeno";
 
-                const imageUrl =
-                  pet.imagens && pet.imagens.length > 0
-                    ? `${URL}${pet.imagens[0]}`
-                    : "https://via.placeholder.com/150";
+                const imageUrl = pet.foto_url
+                  ? `${API_BASE_URL}/download/${pet.foto_url}`
+                  : 'https://via.placeholder.com/150';
 
                 return (
                   <TouchableOpacity
