@@ -32,7 +32,7 @@ export default function LoginScreen() {
       isOng = response.user_metadata.role === "ONG";
       await AsyncStorage.setItem("token", response.token);
       await AsyncStorage.setItem("role", response.user_metadata.role);
-      await AsyncStorage.setItem("user_id", response.user_metadata.id);
+      await AsyncStorage.setItem("user_id", response.user_metadata.id.toString());
     } catch (error: any) {
       console.error("Erro no login:", error);
       return Alert.alert("Erro", error.message || "Falha ao fazer login.");
