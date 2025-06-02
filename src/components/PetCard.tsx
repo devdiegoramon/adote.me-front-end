@@ -15,10 +15,10 @@ export interface Pet {
   id: number;
   nome: string;
   idade: string;
-  imagem: ImageSourcePropType;
+  imagem?: ImageSourcePropType;
   filtros: string[];
-  ong: string;
-  local: string;
+  ong?: string;
+  local?: string;
 }
 
 type PetCardProps = {
@@ -30,10 +30,10 @@ export function PetCard(data: PetCardProps) {
   const showLocale = data.showLocale ?? true;
 
   const renderPetItem = ({ item: pet }: { item: Pet }) => (
-    <Link href={`pet-details/${pet.id}`} asChild>
+    <Link href={`(ong)/pet-details/${pet.id}`} asChild>
       <TouchableOpacity className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row gap-4">
         <Image
-          source={pet.imagem}
+          source={pet.imagem ?? require("../../assets/paw.png")}
           className="w-36 h-36 rounded-xl"
           resizeMode="cover"
         />
