@@ -1,10 +1,23 @@
 // lib/api/pets.ts
-import { apiFetch } from './index';
+import { makeApiCall } from "./index";
+import authorization from "./interceptors/authorization";
 
 export async function getPets() {
-  return apiFetch("/pets"); // Faz GET /pets
+  return makeApiCall({
+    endpoint: "/pets",
+    interceptors: [authorization],
+    options: {
+      method: "GET",
+    },
+  });
 }
 
 export async function getPetById(id: string) {
-  return apiFetch(`/pets/${id}`); // Faz GET /pets/:id
+  return makeApiCall({
+    endpoint: `/pets/${id}`,
+    interceptors: [authorization],
+    options: {
+      method: "GET",
+    },
+  });
 }
