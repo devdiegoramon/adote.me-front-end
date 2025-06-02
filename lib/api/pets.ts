@@ -61,18 +61,35 @@ export async function petRegister(payload: PetRegisterPayload) {
 
 export async function uploadImagemPet(petId: number, imagemUri: string) {
   const formData = new FormData();
-  const filename = imagemUri.split("/").pop()!;
-  const blob = dataURLtoBlob(imagemUri);
-
-  // ✅ Forma correta de anexar ao FormData
-  formData.append("image", blob, filename);
   
-  console.log('Blob criado:', blob);
-  console.log('Filename:', filename);
+  // Verificar se é data URL (base64) ou caminho de arquivo
+  if (imagemUri.startsWith('data:')) {
+    // Caso navegador - data URL base64
+    const filename = `pet_${petId}_${Date.now()}.jpg`;
+    const blob = dataURLtoBlob(imagemUri);
+    formData.append("image", blob, filename);
+  } else {
+    // Caso mobile - caminho de arquivo
+    const filename = imagemUri.split("/").pop() || `pet_${petId}_${Date.now()}.jpg`;
+    const fileExtension = filename.split('.').pop()?.toLowerCase() || 'jpg';
+    const mimeType = `image/${fileExtension === 'jpg' ? 'jpeg' : fileExtension}`;
+    
+    // Para React Native, usar o objeto com uri, type e name
+    formData.append("image", {
+      uri: imagemUri,
+      type: mimeType,
+      name: filename,
+    } as any);
+  }
+  
+  console.log('Tipo de imagem:', imagemUri.startsWith('data:') ? 'Base64' : 'File Path');
+  console.log('URI/Path:', imagemUri);
 
   return fetch(`${API_BASE_URL}/api/pets/image/${petId}`, {
     method: "POST",
     body: formData,
-    // ✅ Correto - não definir Content-Type para FormData
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
 }

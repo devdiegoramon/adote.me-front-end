@@ -8,6 +8,7 @@ export const API_BASE_URL =
     : `http://${localIP}:3000`;
     
 export async function apiFetch(path: string, options: RequestInit = {}) {
+  console.log(API_BASE_URL)
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
       "Content-Type": "application/json",
@@ -18,7 +19,7 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || "Erro na requisição");
+    throw new Error(errorData && "Erro na requisição");
   }
 
   return response.json();

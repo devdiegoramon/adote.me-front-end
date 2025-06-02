@@ -51,7 +51,7 @@ export default function HomeAdotanteScreen() {
       "Adulto (3-7 anos)",
       "Idoso (7+ anos)",
     ],
-    sexo: ["Macho", "Fêmea"],
+    sexo: ["Macho", "Femea"],
   };
 
   useEffect(() => {

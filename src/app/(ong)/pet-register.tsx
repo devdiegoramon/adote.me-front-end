@@ -74,15 +74,16 @@ export default function PetRegisterScreen() {
 
   try {
     const response = await petRegister(payload);
-    console.log("Pet cadastrado com sucesso:", response);
+    console.log("Pet cadastrado com sucesso");
     alert("Pet cadastrado com sucesso!");
 
     
     if (imagem && response.pet._id) {
+      console.log("oi")
       const res = await uploadImagemPet(response.pet._id, imagem);
       console.log('📸 Imagem enviada com sucesso:', await res.json());
     } else {
-      alert("Pet cadastrado sem imagem.");
+      console.log("Pet cadastrado sem imagem.");
     }
   } catch (error) {
     console.error("Erro ao cadastrar pet:", error);
@@ -143,7 +144,7 @@ export default function PetRegisterScreen() {
 
           <Dropdown
             title="Sexo"
-            options={["Macho", "Fêmea"]}
+            options={["Macho", "Femea"]}
             selectedValue={sexo}
             onValueChange={setSexo}
           />
