@@ -15,10 +15,7 @@ export default function LoginScreen() {
   const [senha, setSenha] = useState("");
   const [isOng, setIsOng] = useState(false);
 
-  const toggleSwitch = () => setIsOng((previous) => !previous);
-
   const handleLogin = async () => {
-    // Validação básica - verifica se os campos estão preenchidos
     if (!email || !senha) {
       Alert.alert("Erro", "Preencha todos os campos.");
       return;
@@ -27,17 +24,18 @@ export default function LoginScreen() {
     try {
       const response = await login({ email, senha });
       console.log("Login bem-sucedido:", response);
+
       await AsyncStorage.setItem("token", response.token);
+
+      // Redireciona apenas se o login for bem-sucedido
+      if (isOng) {
+        router.replace("/(ong)/home");
+      } else {
+        router.replace("/(adotante)/home");
+      }
     } catch (error: any) {
       console.error("Erro no login:", error);
       Alert.alert("Erro", error.message || "Falha ao fazer login.");
-    }
-
-    // Redireciona para a tela inicial após o "login"
-    if (isOng) {
-      router.replace("/(ong)/home");
-    } else {
-      router.replace("/(adotante)/home");
     }
   };
 
