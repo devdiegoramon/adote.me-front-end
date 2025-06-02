@@ -9,6 +9,9 @@ import { FormSwitch } from "../../components/FormSwitch";
 import { Button } from "../../components/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../styles/colors";
+import { PetRegisterPayload } from "../../../lib/api/pets";
+import { petRegister } from "../../../lib/api/pets";
+import { uploadImagemPet } from "../../../lib/api/pets";
 
 export default function PetRegisterScreen() {
   const [nome, setNome] = useState("");
@@ -36,24 +39,51 @@ export default function PetRegisterScreen() {
     }
   };
 
-  const handleCadastrar = () => {
-    const novoPet = {
-      nome,
-      tipo,
-      idade,
-      porte,
-      descricao,
-      imagem,
-      vacinado,
-      castrado,
-      sexo,
-      cor,
-      raca,
-    };
+  const handleCadastrar = async () => {
+  const payload: PetRegisterPayload = {
+  nome,
+  especie: tipo.toUpperCase() as PetRegisterPayload["especie"],
+  idade: Number(idade),
+  porte: porte.toUpperCase() as PetRegisterPayload["porte"],
+  peso: 10, // precisa virar input depois
+  descricao,
+  ong_id: 1, // substituir pelo id da ONG autenticada
+  foto_url: "",
+  vacinado,
+  castrado,
+  vermifugado: false,
+  microchipado: false,
+  sexo: sexo.toUpperCase() as PetRegisterPayload["sexo"],
+  raca_id: 228, // mock
+  personalidades: [1, 2], // mock
+  coordenadas: {
+    latitude: -23.5505,
+    longitude: -46.6333
+  },
+  cidade: "São Paulo",
+  estado: "SP",
+  nivelEnergia: "ALTO", // mock
+  necessidades_especiais: null,
+  imagens: []
+};
 
-    console.log("Pet cadastrado:", novoPet);
+  try {
+    const response = await petRegister(payload);
+    console.log("Pet cadastrado com sucesso:", response);
     alert("Pet cadastrado com sucesso!");
-  };
+
+    
+    if (imagem && response.pet._id) {
+      const res = await uploadImagemPet(response.pet._id, imagem);
+      console.log('📸 Imagem enviada com sucesso:', await res.json());
+    } else {
+      alert("Pet cadastrado sem imagem.");
+    }
+  } catch (error) {
+    console.error("Erro ao cadastrar pet:", error);
+    alert("Erro ao cadastrar pet.");
+  }
+};
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4" edges={[]}>
