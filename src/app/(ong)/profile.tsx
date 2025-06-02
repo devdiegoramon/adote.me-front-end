@@ -3,6 +3,7 @@ import { InfoCard } from "../../components/InfoCard";
 import { useEffect, useState } from "react";
 import { getLoggedProfile } from "../../../lib/api/user";
 import { ActivityIndicator } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type OngProfile = {
   nome: string;
@@ -32,13 +33,15 @@ export default function ProfileScreen() {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const data = await getLoggedProfile();
+        const userJson = await AsyncStorage.getItem("user");
+        const user = userJson ? JSON.parse(userJson) : null;
+        console.log(user)
         setProfile({
-          nome: data.nome,
-          email: data.email,
-          telefone: data.telefone,
-          cnpj: data.cnpj,
-          endereco: parseEndereco(data.endereco, data.cidade, data.estado),
+          nome: user.nome,
+          email: user.email,
+          telefone: user.telefone,
+          cnpj: user.cnpj,
+          endereco: parseEndereco(user.endereco.logradouro, user.cidade, user.estado),
         });
       } catch (error) {
         console.error("❌ Erro ao buscar profile:", error);
