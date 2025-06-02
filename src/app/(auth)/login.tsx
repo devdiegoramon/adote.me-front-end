@@ -24,16 +24,19 @@ export default function LoginScreen() {
       return;
     }
 
+    let isOng = false;
+
     try {
       const response = await login({ email, senha });
       console.log("Login bem-sucedido:", response);
+      isOng = response.user_metadata.role === "ONG";
       await AsyncStorage.setItem("token", response.token);
+      await AsyncStorage.setItem("role", response.user_metadata.role);
     } catch (error: any) {
       console.error("Erro no login:", error);
       return Alert.alert("Erro", error.message || "Falha ao fazer login.");
     }
 
-    // Redireciona para a tela inicial após o "login"
     if (isOng) {
       router.replace("/(ong)/home");
     } else {

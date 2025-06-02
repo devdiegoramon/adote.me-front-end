@@ -19,12 +19,15 @@ SplashScreen.setOptions({
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [hasUser, setHasUser] = useState(false);
+  const [isUserOng, setIsUserOng] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
         const token = await AsyncStorage.getItem("token");
+        const role = await AsyncStorage.getItem("role");
         setHasUser(!!token);
+        setIsUserOng(role === "ONG");
         await new Promise(resolve => setTimeout(resolve, 1000));
       } catch (e) {
         console.warn(e);
@@ -50,20 +53,23 @@ export default function App() {
 
   if (appIsReady) {
     if (hasUser) {
-      return (<Redirect href="(ong)/home" />);
+      if (isUserOng) {
+        return (<Redirect href="(ong)/home" />);
+      }
+      return (<Redirect href="(adotante)/home" />);
     }
     return <Redirect href="(auth)/login" />;
   }
 
   return (
     <SafeAreaView className="flex-1 p-6">
-        <View className="w-full h-full items-center" onLayout={onLayoutRootView}>
-          <Image
-            source={require("../../../assets/logo.png")}
-            className="w-64 m-auto"
-            resizeMode="contain"
-          />
-        </View>
+      <View className="w-full h-full items-center" onLayout={onLayoutRootView}>
+        <Image
+          source={require("../../../assets/logo.png")}
+          className="w-64 m-auto"
+          resizeMode="contain"
+        />
+      </View>
     </SafeAreaView>
   );
 }
