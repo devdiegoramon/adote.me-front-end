@@ -1,9 +1,13 @@
 import { SafeAreaView } from "react-native-safe-area-context";
+import { mockOng } from "../mock/ong";
 import { InfoCard } from "../../components/InfoCard";
 import { useEffect, useState } from "react";
 import { getLoggedProfile } from "../../../lib/api/user";
 import { ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "../../components/Button";
+import { router } from "expo-router";
+import { Alert } from "react-native";
 
 type OngProfile = {
   nome: string;
@@ -28,6 +32,15 @@ function parseEndereco(endereco: Endereco, cidade: string, estado: string): stri
 }
 
 export default function ProfileScreen() {
+    const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("userToken");
+      router.replace("/login");
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível sair da conta.");
+    }
+  };
+
   const [profile, setProfile] = useState<OngProfile>();
 
   useEffect(() => {
@@ -41,7 +54,7 @@ export default function ProfileScreen() {
           email: user.email,
           telefone: user.telefone,
           cnpj: user.cnpj,
-          endereco: parseEndereco(user.endereco.logradouro, user.cidade, user.estado),
+          endereco: parseEndereco(user.endereco, user.cidade, user.estado),
         });
       } catch (error) {
         console.error("❌ Erro ao buscar profile:", error);
@@ -71,6 +84,8 @@ export default function ProfileScreen() {
       <InfoCard label="CNPJ" value={profile.cnpj} />
 
       <InfoCard label="Endereço" value={profile.endereco} />
+
+      <Button text="Sair" onPress={handleLogout} />
     </SafeAreaView>
   );
 }
