@@ -85,11 +85,11 @@ export async function uploadImagemPet(petId: number, imagemUri: string) {
   console.log('Tipo de imagem:', imagemUri.startsWith('data:') ? 'Base64' : 'File Path');
   console.log('URI/Path:', imagemUri);
 
+  // IMPORTANTE: NÃO definir Content-Type manualmente para FormData
+  // O navegador define automaticamente com o boundary correto
   return fetch(`${API_BASE_URL}/api/pets/image/${petId}`, {
     method: "POST",
     body: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+    // Remover headers completamente ou deixar vazio
   });
 }
