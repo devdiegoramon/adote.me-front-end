@@ -11,7 +11,7 @@ import { Link } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../styles/colors";
 
-interface Pet {
+export interface Pet {
   id: number;
   nome: string;
   idade: string;
@@ -21,11 +21,15 @@ interface Pet {
   local: string;
 }
 
-interface PetCardProps {
+type PetCardProps = {
   pets: Pet[];
+  showLocale?: Boolean;
 }
 
-export function PetCard({ pets }: PetCardProps) {
+export function PetCard(data: PetCardProps) {
+  console.log("PetCard data:", data.showLocale);
+  const showLocale = data.showLocale ?? true;
+
   const renderPetItem = ({ item: pet }: { item: Pet }) => (
     <Link href={`pet-details/${pet.id}`} asChild>
       <TouchableOpacity className="bg-gray-50 border border-gray-200 rounded-xl mb-4 p-4 flex-row gap-4">
@@ -54,14 +58,19 @@ export function PetCard({ pets }: PetCardProps) {
             ))}
           </View>
 
-          <View className="flex-row items-center gap-2">
-            <Ionicons name="home" size={16} color={colors.green} />
-            <Text className="text-gray-500 text-sm">{pet.ong}</Text>
-          </View>
-          <View className="flex-row items-center gap-2">
-            <Ionicons name="location" size={16} color={colors.green} />
-            <Text className="text-gray-500 text-sm">{pet.local}</Text>
-          </View>
+          {
+            showLocale && <View className="flex-row items-center gap-2">
+              <Ionicons name="home" size={16} color={colors.green} />
+              <Text className="text-gray-500 text-sm">{pet.ong}</Text>
+            </View>
+          }
+          {
+            showLocale && <View className="flex-row items-center gap-2">
+              <Ionicons name="location" size={16} color={colors.green} />
+              <Text className="text-gray-500 text-sm">{pet.local}</Text>
+            </View>
+          }
+
         </View>
       </TouchableOpacity>
     </Link>
@@ -69,7 +78,7 @@ export function PetCard({ pets }: PetCardProps) {
 
   return (
     <FlatList
-      data={pets}
+      data={data.pets}
       keyExtractor={(item) => item.id.toString()}
       showsVerticalScrollIndicator={false}
       renderItem={renderPetItem}
