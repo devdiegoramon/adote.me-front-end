@@ -1,6 +1,7 @@
 // lib/api/pets.ts
 import { apiFetch } from './index';
 import { makeApiCall } from "./index";
+import { makeAuthethicatedApiCall } from "./index";
 import authorization from "./interceptors/authorization";
 import { API_BASE_URL } from './index';
 import { dataURLtoBlob } from '../../src/utils/dataURLtoBlob';
@@ -92,21 +93,17 @@ export async function uploadImagemPet(petId: number, imagemUri: string) {
     body: formData,
     headers: {
       'Content-Type': 'multipart/form-data',
-    },
+  // const response = await makeAuthethicatedApiCall({
+  //   endpoint: `/pets/${id}`,
+  //   options: {
+  //     method: "GET",
+  //   },
   });
 }
 
 // export async function getPets() {
-//   return makeApiCall({
+//   const response = await makeAuthethicatedApiCall({
 //     endpoint: "/pets",
-//     interceptors: [authorization],
-//     options: {
-//       method: "GET",
-//     },
-//   });
-//   const response = await makeApiCall({
-//     endpoint: "/pets",
-//     interceptors: [authorization],
 //     options: {
 //       method: "GET",
 //     },
@@ -120,9 +117,8 @@ export async function uploadImagemPet(petId: number, imagemUri: string) {
 // }
 
 // export async function getPetByOrg(org: number) {
-//   const response = await makeApiCall({
+//   const response = await makeAuthethicatedApiCall({
 //     endpoint: `/pets/org/${org}`,
-//     interceptors: [authorization],
 //     options: {
 //       method: "GET",
 //     },
@@ -132,8 +128,6 @@ export async function uploadImagemPet(petId: number, imagemUri: string) {
 //     throw new Error(response.body.message);
 //   }
 
-//   return response.body;
-// }
 
 // export async function getPetById(id: string) {
 //   const response = await makeApiCall({
