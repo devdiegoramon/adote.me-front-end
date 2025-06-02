@@ -16,7 +16,6 @@ export default function LoginScreen() {
 
 
   const handleLogin = async () => {
-    // Validação básica - verifica se os campos estão preenchidos
     if (!email || !senha) {
       Alert.alert("Erro", "Preencha todos os campos.");
       return;
