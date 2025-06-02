@@ -27,7 +27,6 @@ type PetCardProps = {
 }
 
 export function PetCard(data: PetCardProps) {
-  console.log("PetCard data:", data.showLocale);
   const showLocale = data.showLocale ?? true;
 
   const renderPetItem = ({ item: pet }: { item: Pet }) => (
