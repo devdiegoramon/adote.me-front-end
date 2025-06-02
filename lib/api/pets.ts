@@ -93,13 +93,16 @@ export async function uploadImagemPet(petId: number, imagemUri: string) {
     body: formData,
     headers: {
       'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
+
   // const response = await makeAuthethicatedApiCall({
   //   endpoint: `/pets/${id}`,
   //   options: {
   //     method: "GET",
   //   },
-  });
-}
 
 // export async function getPets() {
 //   const response = await makeAuthethicatedApiCall({

@@ -80,6 +80,8 @@ export default function PetRegisterScreen() {
     
     if (imagem && response.pet._id) {
       console.log("oi")
+      console.log(response.pet._id)
+      console.log(imagem)
       const res = await uploadImagemPet(response.pet._id, imagem);
       console.log('📸 Imagem enviada com sucesso:', await res.json());
     } else {
