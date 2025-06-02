@@ -1,11 +1,10 @@
 // lib/api/pets.ts
-import { makeApiCall } from "./index";
+import { makeAuthethicatedApiCall } from "./index";
 import authorization from "./interceptors/authorization";
 
 export async function getPets() {
-  const response = await makeApiCall({
+  const response = await makeAuthethicatedApiCall({
     endpoint: "/pets",
-    interceptors: [authorization],
     options: {
       method: "GET",
     },
@@ -19,9 +18,8 @@ export async function getPets() {
 }
 
 export async function getPetByOrg(org: number) {
-  const response = await makeApiCall({
+  const response = await makeAuthethicatedApiCall({
     endpoint: `/pets/org/${org}`,
-    interceptors: [authorization],
     options: {
       method: "GET",
     },
@@ -35,9 +33,8 @@ export async function getPetByOrg(org: number) {
 }
 
 export async function getPetById(id: string) {
-  const response = await makeApiCall({
+  const response = await makeAuthethicatedApiCall({
     endpoint: `/pets/${id}`,
-    interceptors: [authorization],
     options: {
       method: "GET",
     },

@@ -1,6 +1,8 @@
 // lib/api/index.ts
 
 // import request_json_body from "./interceptors/request_json_body";
+import authorization from "./interceptors/authorization";
+import refresh_token from "./interceptors/refresh_token";
 import response_json_body from "./interceptors/response_json_body";
 
 export type Interceptor = {
@@ -29,7 +31,7 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
     ...options,
   });
 
-  return response;
+  return { body: await response.json(), status: response.status } as any;
 }
 
 export async function makeApiCall(options: ApiCallOptions): Promise<any> {
@@ -49,7 +51,7 @@ export async function makeApiCall(options: ApiCallOptions): Promise<any> {
 
   var response = await apiFetch(options.endpoint, options.options);
 
-  for (const interceptor of [...options.interceptors.reverse(), response_json_body]) {
+  for (const interceptor of [...options.interceptors.reverse()]) {
     if (typeof interceptor.onResponse !== "function") {
       continue;
     }
@@ -64,4 +66,16 @@ export async function makeApiCall(options: ApiCallOptions): Promise<any> {
   }
 
   return response;
+}
+
+export async function makeAuthethicatedApiCall(
+  options: ApiCallOptions,
+): Promise<any> {
+  if (!options.interceptors) {
+    options.interceptors = [];
+  }
+
+  options.interceptors.push(authorization, refresh_token);
+
+  return makeApiCall(options);
 }
