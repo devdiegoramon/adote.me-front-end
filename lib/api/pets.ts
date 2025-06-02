@@ -17,14 +17,13 @@ export async function getPets() {
   return response.body;
 }
 
-export async function getPetByOrg(org: number) {
+export async function getPetByOng(org: number) {
   const response = await makeAuthethicatedApiCall({
-    endpoint: `/pets/org/${org}`,
+    endpoint: `/pets/ong/${org}`,
     options: {
       method: "GET",
     },
   });
-  
   if (response.status !== 200) {
     throw new Error(response.body.message);
   }
