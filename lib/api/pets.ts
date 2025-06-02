@@ -42,7 +42,11 @@ export async function getPetById(id: string) {
 }
 
 export async function getPetByOngId(id: string) {
-  return apiFetch(`/api/pets/ong/${id}`); // Faz GET /pets/:id
+  return apiFetch(`/api/pets/ong/${id}`);
+}
+
+export async function getSolicitacoesByOngId(id: string) {
+  return apiFetch(`/api/users/solicitacoes/${id}`); 
 }
 
 export async function petRegister(payload: PetRegisterPayload) {
